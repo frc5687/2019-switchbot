@@ -1,0 +1,10 @@
+diff a/src/main/java/org/frc5687/switchbot/robot/commands/DriveArm.java b/src/main/java/org/frc5687/switchbot/robot/commands/DriveArm.java	(rejected hunks)
+@@ -35,7 +35,7 @@
+     @Override
+     protected void execute() {
+         // Get the base speed from the throttle
+-        double speed = _oi.getArmSpeed();
++        double speed = DriverStation.getInstance().isAutonomous() ? 0 : _oi.getArmSpeed();
+         if (speed == 0) {
+             double newSetpoint = _arm.getAngle();
+             double setPointSpeed = _oi.getArmSetpointSpeed();

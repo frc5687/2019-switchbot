@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="2019-switchbot:main" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.wpilibj:wpilibj-java:2019.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.ntcore:ntcore-java:2019.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.wpiutil:wpiutil-java:2019.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.thirdparty.frc2019.opencv:opencv-java:3.4.4-4" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.cscore:cscore-java:2019.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.cameraserver:cameraserver-java:2019.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.hal:hal-java:2019.1.1" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibj/wpilibj-java/2019.1.1/5b473f4cba856d65f2567b631e63d43e9eac71b1/wpilibj-java-2019.1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibj/wpilibj-java/2019.1.1/db163458e3b3460c8b0aa2949e66f6fe87a66d4c/wpilibj-java-2019.1.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kauailabs.navx.frc/navx-java/3.1.344/30981bb5cf08864cfdca75cfd21418470e16c167/navx-java-3.1.344.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kauailabs.navx.frc/navx-java/3.1.344/d4d52e9506c6d7a139b3a473ce62d4b2d2ed6019/navx-java-3.1.344-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.cscore/cscore-java/2019.1.1/cd13486e32f85bcaaf7af3d17a0b3c4e05b28f5a/cscore-java-2019.1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.cscore/cscore-java/2019.1.1/9187b9252be5041f1254a22fcaefb8eaea8acfc8/cscore-java-2019.1.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ctre.phoenix/api-java/5.12.1/fa670d8c5af999645a422de4b9b55b21919e0c2e/api-java-5.12.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ctre.phoenix/api-java/5.12.1/1f513a09b7e6c46484c2251435218f894e986fea/api-java-5.12.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jaci.pathfinder/Pathfinder-Java/2019.1.11/65fcf6ce6dd64f8fe704fd81c802fe420e899556/Pathfinder-Java-2019.1.11.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jaci.pathfinder/Pathfinder-Java/2019.1.11/ab724e8dfc1796cd1703ebbd8fd67e048dcc786a/Pathfinder-Java-2019.1.11-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

@@ -1,0 +1,13 @@
+diff a/src/main/java/org/frc5687/switchbot/robot/commands/AutoGroup.java b/src/main/java/org/frc5687/switchbot/robot/commands/AutoGroup.java	(rejected hunks)
+@@ -88,9 +88,9 @@
+         addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.UP));
+         addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 8, 0.4, true, true, 1000, "Attack1"));
+         addSequential(new AutoAlign(robot, -24, 1.0, 5000, 1.0, AutoAlign.DriveTrainBehavior.bothSides, "left 22deg"));
+-        addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.FRONT_SWITCH));
+-        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 110, 0.75, true, true, 5000, "Attack2"));
++        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 110, 0.6, true, true, 5000, "Attack2"));
+         // addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 0, 0, true, true, 5000, "Stop"));
++        addSequential(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.FRONT_SWITCH));
+         addSequential(new AutoAlign(robot, 0, 1.0, 2000, 1.0, AutoAlign.DriveTrainBehavior.bothSides, "face switch"));
+ 
+         addSequential(new Eject(robot.getPincer()));
