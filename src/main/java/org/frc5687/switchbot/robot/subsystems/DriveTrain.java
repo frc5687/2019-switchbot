@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -35,6 +36,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     CANSparkMax _rightMaster;
     CANSparkMax _rightFollower;
 
+    CANEncoder _leftEncoder;
+    CANEncoder _rightEncoder;
 
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
@@ -58,6 +61,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _rightFollower.follow(_rightMaster);
 
         // Setup motors
+
         // _leftMaster.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
         // _leftFollowerA.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
 
@@ -81,14 +85,15 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 //        _rightMaster.configNominalOutputReverse(0.0, 0);
 //        _rightFollowerA.configNominalOutputReverse(0.0, 0);
 //
-//        _leftMaster.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
-//        _leftFollowerA.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
-//        _rightMaster.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
-//        _rightFollowerA.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
+        _leftMaster.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
+        _leftFollower.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
+        _rightMaster.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
+        _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
-//        // Configure the encoders
-//        _leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-//        _rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        // Configure the encoders
+        _leftEncoder = _leftMaster.getEncoder();
+        _rightEncoder = _rightMaster.getEncoder();
+
         resetDriveEncoders();
 
         _irTape = new AnalogInput(RobotMap.Analog.TAPE_IR);
@@ -318,27 +323,25 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 */
 
     public void setCurrentLimiting(int amps) {
-//        _leftMaster.configContinuousCurrentLimit(amps, 0);
-//        _leftMaster.configPeakCurrentLimit(0, 0);
-//        _rightMaster.configContinuousCurrentLimit(amps, 0);
-//        _rightMaster.configPeakCurrentLimit(0, 0);
+        _leftMaster.setSmartCurrentLimit(amps);
+        _rightMaster.setSmartCurrentLimit(amps);
     }
 
 
     public double getLeftSpeed() {
-        return 0;// _leftMaster.getMotorOutputPercent() / Constants.DriveTrain.HIGH_POW;
+        return _leftMaster.get();
     }
 
     public double getRightSpeed() {
-        return 0; // _rightMaster.getMotorOutputPercent() / Constants.DriveTrain.HIGH_POW;
+        return _rightMaster.get();
     }
 
     public double getLeftRate() {
-        return 0; //_leftMaster.getSelectedSensorVelocity(0);
+        return _leftEncoder.getVelocity();
     }
 
     public double getRightRate() {
-        return 0; // _rightMaster.getSelectedSensorVelocity(0);
+        return _rightEncoder.getVelocity();
     }
 
     public DriveMode getDriveMode() { return _driveMode; }
@@ -369,11 +372,10 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 
     public void enableBrakeMode() {
         try {
-//            _leftMaster.setNeutralMode(NeutralMode.Brake);
-//            _leftFollowerA.setNeutralMode(NeutralMode.Brake);
-//
-//            _rightMaster.setNeutralMode(NeutralMode.Brake);
-//            _rightFollowerA.setNeutralMode(NeutralMode.Brake);
+            _leftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            _rightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            _leftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            _rightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         } catch (Exception e) {
             DriverStation.reportError("DriveTrain.enableBrakeMode exception: " + e.toString(), false);
@@ -383,10 +385,10 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 
     public void enableCoastMode() {
         try {
-//            _leftMaster.setNeutralMode(NeutralMode.Coast);
-//            _leftFollowerA.setNeutralMode(NeutralMode.Coast);
-//            _rightMaster.setNeutralMode(NeutralMode.Coast);
-//            _rightFollowerA.setNeutralMode(NeutralMode.Coast);
+            _leftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            _rightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            _leftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            _rightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         } catch (Exception e) {
             DriverStation.reportError("DriveTrain.enableCoastMode exception: " + e.toString(), false);
         }
