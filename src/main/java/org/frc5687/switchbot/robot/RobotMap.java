@@ -3,10 +3,10 @@ package org.frc5687.switchbot.robot;
 public class RobotMap {
 
     public static class CAN {
-        public static final int LEFT_MASTER_TALON = 0;
-        public static final int RIGHT_MASTER_TALON = 1;
-        public static final int LEFT_FOLLOWER_VICTORSPX = 3;
-        public static final int RIGHT_FOLLOWER_VICTORSPX = 2;
+        public static final int LEFT_MASTER_SPARK= 0;
+        public static final int RIGHT_MASTER_SPARK = 1;
+        public static final int LEFT_FOLLOWER_SPARK = 3;
+        public static final int RIGHT_FOLLOWER_SPARK = 2;
         public static final int LEFT_INTAKE_VICTORSPX = 0;
         public static final int RIGHT_INTAKE_VICTORSPX = 1;
 
