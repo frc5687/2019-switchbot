@@ -20,6 +20,7 @@ import org.frc5687.switchbot.robot.Robot;
 import org.frc5687.switchbot.robot.RobotMap;
 import org.frc5687.switchbot.robot.commands.AllDrive;
 import org.frc5687.switchbot.robot.utils.Helpers;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static org.frc5687.switchbot.robot.utils.Helpers.limit;
 
@@ -224,10 +225,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public long getLeftTicks() {
-        return 0; //_leftMaster.getSelectedSensorPosition(0);
+        throw new NotImplementedException();
     }
+
     public long getRightTicks() {
-        return 0; //_rightMaster.getSelectedSensorPosition(0);
+        throw new NotImplementedException();
     }
 
     /**
@@ -235,10 +237,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public double getLeftDistance() {
-        return getLeftTicks() * Constants.Encoders.INCHES_PER_PULSE;
+        return _leftEncoder.getPosition();
     }
+
     public double getRightDistance() {
-        return getRightTicks() * Constants.Encoders.INCHES_PER_PULSE;
+s        return _rightEncoder.getPosition();
     }
 
 
