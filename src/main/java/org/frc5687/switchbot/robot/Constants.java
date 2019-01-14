@@ -154,6 +154,11 @@ public class Constants {
 
             public static final double MIN_SPEED = 0.25;
 
+            public class toTarget {
+                public static final double CAMERA_HEIGHT = 7.25; //Inches
+                public static final double TARGET_HEIGHT = 29; //Inches
+            }
+
             public class MaxVel {
                 public static final double MPS = 2.33; // Meters Per Second
                 public static final double IPS = 130; // Inches Per Second
