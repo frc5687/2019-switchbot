@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
         _imu.reset();
         _drivetrain.resetDriveEncoders();
         _drivetrain.enableBrakeMode();
-        _drivetrain.setCurrentLimiting(20);
+        _drivetrain.setCurrentLimiting(40);
 
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         if (_autoCommand != null) _autoCommand.cancel();
         _drivetrain.enableCoastMode();
-        _drivetrain.setCurrentLimiting(20);
+        _drivetrain.setCurrentLimiting(40);
     }
 
     @Override
