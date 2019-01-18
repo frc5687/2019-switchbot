@@ -84,6 +84,7 @@ public class OI {
         _driverLeftTrigger.whenPressed(new OpenPincer(robot.getPincer()));
         _driverLeftTrigger.whenReleased(new ClosePincer(robot.getPincer()));
 
+        _driverRightTrigger.whenPressed(new IntakeOnly(robot.getPincer()));
         _driverRightTrigger.whenPressed(new Eject(robot.getPincer(), this));
 
         _driverLeftBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));

@@ -192,12 +192,12 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
 
         if (speed==0.0) {
-            leftMotorOutput = rotation;
-            rightMotorOutput = -rotation;
+            leftMotorOutput = -rotation;
+            rightMotorOutput = rotation;
         } else {
             double delta = rotation * Math.abs(speed);
-            leftMotorOutput = speed + delta;
-            rightMotorOutput = speed - delta;
+            leftMotorOutput = speed - delta;
+            rightMotorOutput = speed + delta;
         }
 
         setPower(limit(leftMotorOutput), limit(rightMotorOutput));

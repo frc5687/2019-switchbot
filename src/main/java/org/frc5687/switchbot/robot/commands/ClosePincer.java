@@ -31,8 +31,8 @@ public class ClosePincer extends Command {
     protected void execute() {
 
         _pincer.close();
-        _pincer.setIntakeState(Pincer.IntakeState.HOLD);
-        _pincer.runIntake(0);
+        //_pincer.setIntakeState(Pincer.IntakeState.HOLD);
+        //_pincer.runIntake(0);
         _done = true;
     }
 
