@@ -118,7 +118,7 @@ public class Pincer extends Subsystem {
     }
 
     public void updateDashboard() {
-        SmartDashboard.putNumber("Pincer/IRSenson", _cubeSensor.getValue());
+        SmartDashboard.putNumber("Pincer/IRSensor", _cubeSensor.getValue());
         SmartDashboard.putBoolean("Pincer/CubeDetected", isCubeDetected());
     }
 }

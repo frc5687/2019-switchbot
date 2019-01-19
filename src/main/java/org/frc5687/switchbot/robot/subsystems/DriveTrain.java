@@ -45,25 +45,26 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     public AHRS _imu;
 
     public DriveTrain(Robot robot) {
-        _robot = robot;
-        _imu = robot.getIMU();
+        try {
+            _robot = robot;
+            _imu = robot.getIMU();
 
-        _leftMaster = new CANSparkMax(RobotMap.CAN.LEFT_MASTER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
-        _rightMaster = new CANSparkMax(RobotMap.CAN.RIGHT_MASTER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
-        _leftFollower = new CANSparkMax(RobotMap.CAN.LEFT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
-        _rightFollower = new CANSparkMax(RobotMap.CAN.RIGHT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
+            _leftMaster = new CANSparkMax(RobotMap.CAN.LEFT_MASTER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
+            _rightMaster = new CANSparkMax(RobotMap.CAN.RIGHT_MASTER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
+            _leftFollower = new CANSparkMax(RobotMap.CAN.LEFT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
+            _rightFollower = new CANSparkMax(RobotMap.CAN.RIGHT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        // Motor Initialization
+            // Motor Initialization
 
-        // Setup followers to follow their master
-        _leftFollower.follow(_leftMaster);
-        
-        _rightFollower.follow(_rightMaster);
+            // Setup followers to follow their master
+            _leftFollower.follow(_leftMaster);
 
-        // Setup motors
+            _rightFollower.follow(_rightMaster);
 
-        // _leftMaster.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
-        // _leftFollowerA.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
+            // Setup motors
+
+            // _leftMaster.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
+            // _leftFollowerA.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
 
 //        _rightMaster.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
 //        _rightFollowerA.configPeakOutputForward(Constants.DriveTrain.HIGH_POW, 0);
@@ -85,20 +86,22 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 //        _rightMaster.configNominalOutputReverse(0.0, 0);
 //        _rightFollowerA.configNominalOutputReverse(0.0, 0);
 //
-        _leftMaster.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
-        _leftFollower.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
-        _rightMaster.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
-        _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
+            _leftMaster.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
+            _leftFollower.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
+            _rightMaster.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
+            _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
-        // Configure the encoders
-        _leftEncoder = _leftMaster.getEncoder();
-        _rightEncoder = _rightMaster.getEncoder();
+            // Configure the encoders
+            _leftEncoder = _leftMaster.getEncoder();
+            _rightEncoder = _rightMaster.getEncoder();
 
-        resetDriveEncoders();
+            resetDriveEncoders();
 
-        _irTape = new AnalogInput(RobotMap.Analog.TAPE_IR);
+            _irTape = new AnalogInput(RobotMap.Analog.TAPE_IR);
 
+        } catch (Exception e) {
 
+        }
     }
 
 
@@ -417,16 +420,19 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public void updateDashboard() {
-        SmartDashboard.putNumber("DriveTrain/LeftDistance", getLeftDistance());
-        SmartDashboard.putNumber("DriveTrain/RIghtDistance", getRightDistance());
-        SmartDashboard.putNumber("DriveTrain/LeftRate", getLeftRate());
-        SmartDashboard.putNumber("DriveTrain/RightRate", getRightRate());
-        SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
-        SmartDashboard.putNumber("DriveTrain/RightSpeed", getRightSpeed());
-        SmartDashboard.putNumber("DriveTrain/Yaw", _imu.getYaw());
-        SmartDashboard.putBoolean("DriveTrain/tapeIsDetected()", tapeIsDetected());
-        SmartDashboard.putNumber("DriveTrain/IR Tape raw", _irTape.getValue());
-
+        try {
+            SmartDashboard.putNumber("DriveTrain/LeftDistance", getLeftDistance());
+            SmartDashboard.putNumber("DriveTrain/RIghtDistance", getRightDistance());
+            SmartDashboard.putNumber("DriveTrain/LeftRate", getLeftRate());
+            SmartDashboard.putNumber("DriveTrain/RightRate", getRightRate());
+            SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
+            SmartDashboard.putNumber("DriveTrain/RightSpeed", getRightSpeed());
+            SmartDashboard.putNumber("DriveTrain/Yaw", _imu.getYaw());
+            SmartDashboard.putBoolean("DriveTrain/tapeIsDetected()", tapeIsDetected());
+            SmartDashboard.putNumber("DriveTrain/IR Tape raw", _irTape.getValue());
+        } catch (Exception e) {
+            
+        }
     }
 
 }
