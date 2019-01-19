@@ -43,6 +43,10 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
     private AnalogInput _irTape;
     public AHRS _imu;
+    private double _rightOffset;
+    private double _leftOffset;
+    private double _lastLeftPosition = 0;
+    private double _lastRightPosition = 0;
 
     public DriveTrain(Robot robot) {
         _robot = robot;
@@ -224,11 +228,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public long getLeftTicks() {
-        throw new RuntimeException();
+        return (long)_leftEncoder.getPosition();
     }
 
     public long getRightTicks() {
-        throw new RuntimeException();
+        return (long)_rightEncoder.getPosition();
     }
 
     /**
@@ -236,13 +240,20 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public double getLeftDistance() {
-        return _leftEncoder.getPosition();
+        double current = _leftEncoder.getPosition();
+        if (current!=0) {
+            _lastLeftPosition = current;
+        }
+        return _lastLeftPosition * Constants.DriveTrain.LEFT_RATIO - _leftOffset;
     }
 
     public double getRightDistance() {
-        return _rightEncoder.getPosition();
+        double current = _rightEncoder.getPosition();
+        if (current!=0) {
+            _lastRightPosition = current;
+        }
+        return _lastRightPosition * Constants.DriveTrain.RIGHT_RATIO - _rightOffset;
     }
-
 
     /**
      * @return average of leftDistance and rightDistance
@@ -417,8 +428,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public void updateDashboard() {
-        SmartDashboard.putNumber("DriveTrain/LeftDistance", getLeftDistance());
-        SmartDashboard.putNumber("DriveTrain/RIghtDistance", getRightDistance());
+        SmartDashboard.putNumber("DriveTrain/LeftDistance", _lastLeftPosition);
+        SmartDashboard.putNumber("DriveTrain/RIghtDistance", _lastRightPosition);
         SmartDashboard.putNumber("DriveTrain/LeftRate", getLeftRate());
         SmartDashboard.putNumber("DriveTrain/RightRate", getRightRate());
         SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
