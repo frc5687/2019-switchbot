@@ -11,6 +11,7 @@ import org.frc5687.switchbot.robot.RobotMap;
 import org.frc5687.switchbot.robot.commands.DriveArm;
 import org.frc5687.switchbot.robot.utils.AnglePotentiometer;
 import org.frc5687.switchbot.robot.utils.PDP;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 /**
  * Created by Ben Bernard on 6/5/2018.
@@ -22,6 +23,7 @@ public class Arm extends PIDSubsystem {
     private AnglePotentiometer _pot;
     private DigitalInput _frontLimit;
     private DigitalInput _rearLimit;
+
 
 
 
@@ -55,27 +57,27 @@ public class Arm extends PIDSubsystem {
         // See if we are drawing too much power...
         if (_pdp.getCurrent(RobotMap.PDP.ARM_VICTORSP) > Constants.Arm.CURRENT_CAP) {
             // If this is the start of an excess draw condition, record it
-            DriverStation.reportError("Arm cap of " + Constants.Arm.CURRENT_CAP + " exceeded at " + _pdp.getCurrent(RobotMap.PDP.ARM_VICTORSP), false);
+            RioLogger.debug(this.toString(), "Arm cap of " + Constants.Arm.CURRENT_CAP + " exceeded at " + _pdp.getCurrent(RobotMap.PDP.ARM_VICTORSP));
             if (_capTimeout==0) {
                 _capTimeout = System.currentTimeMillis() + Constants.Arm.TIMEOUT_CAP;
                 _capDirection = _direction;
-                DriverStation.reportError("Arm cap setting direction to " + _capDirection, false);
+                RioLogger.info(this.toString(),  "Arm cap setting direction to " + _capDirection);
             } else if (_capDirection !=_direction) {
                 // If the direction has changed, reset!
                 _capTimeout = 0;
                 _capDirection = 0;
-                DriverStation.reportError("Arm cap resetting direction to " + _capDirection, false);
+                RioLogger.info(this.toString(), "Arm cap resetting direction to " + _capDirection);
             } else if (System.currentTimeMillis() > Constants.Arm.TIMEOUT_CAP) {
                 // Timeout exceeded...
                 _atFrontLimit  = _direction>0;
                 _atRearLimit = _direction<0;
-                DriverStation.reportError("Arm cap atFront set to " + _atFrontLimit, false);
-                DriverStation.reportError("Arm cap atRear set to " + _atRearLimit, false);
+                RioLogger.info(this.toString(), "Arm cap atFront set to " + _atFrontLimit);
+                RioLogger.info(this.toString(),  "Arm cap atRear set to " + _atRearLimit);
             }
         } else {
             // Overdraw condition ended
             if (_capTimeout!=0) {
-                DriverStation.reportError("Arm cap limit cleared " + _capDirection, false);
+                RioLogger.info(this.toString(), "Arm cap limit cleared " + _capDirection);
             }
             _capTimeout = 0;
             _capDirection = 0;

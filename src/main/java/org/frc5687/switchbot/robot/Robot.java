@@ -12,6 +12,7 @@ import org.frc5687.switchbot.robot.commands.AutoGroup;
 import org.frc5687.switchbot.robot.subsystems.*;
 import org.frc5687.switchbot.robot.utils.AutoChooser;
 import org.frc5687.switchbot.robot.utils.PDP;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class Robot extends TimedRobot {
 
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot {
     private Pincer _pincer;
     private Arm _arm;
     private Shifter _shifter;
+
 
 
     private OI _oi;
@@ -67,7 +69,7 @@ public class Robot extends TimedRobot {
             _camera0.setResolution(320, 240);
             _camera0.setFPS(10);
         } catch (Exception e) {
-            DriverStation.reportError(e.getMessage(), true);
+            RioLogger.error(this.toString(),  e.getMessage());
         }
 
         try {
@@ -75,7 +77,7 @@ public class Robot extends TimedRobot {
             _camera1.setResolution(320, 240);
             _camera1.setFPS(30);
         } catch (Exception e) {
-            DriverStation.reportError(e.getMessage(), true);
+            RioLogger.error(this.toString(), (e.getMessage()));
         }
 
     }
@@ -85,7 +87,7 @@ public class Robot extends TimedRobot {
         try {
             super.loopFunc();
         } catch (Throwable throwable) {
-            DriverStation.reportError("Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
+            RioLogger.error(this.toString(), "Unhandled exception: " + throwable.toString());
             System.exit(1);
         }
     }
@@ -106,7 +108,7 @@ public class Robot extends TimedRobot {
         if (gameData==null) { gameData = ""; }
         int retries = 100;
         while (gameData.length() < 2 && retries > 0) {
-            DriverStation.reportError("Gamedata is " + gameData + " retrying " + retries, false);
+            RioLogger.debug(this.toString(), "Gamedata is " + gameData + " retrying " + retries);
             try {
                 Thread.sleep(5);
                 gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -116,7 +118,7 @@ public class Robot extends TimedRobot {
             retries--;
         }
         SmartDashboard.putString("Auto/gameData", gameData);
-        DriverStation.reportError("gameData before parse: " + gameData, false);
+        RioLogger.debug(this.toString(),  "gameData before parse: " + gameData);
         int switchSide = 0;
         if (gameData.length()>0) {
             switchSide = gameData.charAt(0)=='L' ? Constants.AutoChooser.LEFT : Constants.AutoChooser.RIGHT;
@@ -124,7 +126,7 @@ public class Robot extends TimedRobot {
         int autoPosition = _autoChooser.positionSwitchValue();
         SmartDashboard.putNumber("Auto/SwitchSide", switchSide);
         SmartDashboard.putNumber("Auto/Position", autoPosition);
-        DriverStation.reportError("Running AutoGroup with position: " + autoPosition + ",  switchSide: " + switchSide , false);
+        RioLogger.info(this.toString(), "Running AutoGroup with position: " + autoPosition + ",  switchSide: " + switchSide);
         _autoCommand = new AutoGroup(autoPosition, switchSide, this);
         _autoCommand.start();
     }

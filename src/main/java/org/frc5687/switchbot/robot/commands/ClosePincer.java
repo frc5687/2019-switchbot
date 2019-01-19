@@ -3,6 +3,7 @@ package org.frc5687.switchbot.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5687.switchbot.robot.subsystems.Pincer;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 /**
  * Created by Ben Bernard on 6/5/2018.
@@ -10,7 +11,6 @@ import org.frc5687.switchbot.robot.subsystems.Pincer;
 public class ClosePincer extends Command {
     private Pincer _pincer;
     private boolean _done = false;
-
     public ClosePincer(Pincer pincer) {
         _pincer = pincer;
         requires(_pincer);
@@ -18,7 +18,7 @@ public class ClosePincer extends Command {
 
     @Override
     protected void initialize() {
-        DriverStation.reportError("Starting ClosePincer", false);
+        RioLogger.info(this.toString(),  "Starting ClosePincer");
         _done = false;
     }
 
@@ -38,6 +38,6 @@ public class ClosePincer extends Command {
 
     @Override
     protected void end() {
-        DriverStation.reportError("Ending ClosePincer", false);
+        RioLogger.info(this.toString(),  "Ending ClosePincer");
     }
 }

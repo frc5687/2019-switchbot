@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5687.switchbot.robot.Constants;
 import org.frc5687.switchbot.robot.Robot;
 import org.frc5687.switchbot.robot.subsystems.DriveTrain;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class AutoAlign extends Command implements PIDOutput {
 
@@ -33,7 +34,6 @@ public class AutoAlign extends Command implements PIDOutput {
     private DriveTrainBehavior _driveTrainBehavior = DriveTrainBehavior.bothSides;
 
     private double _tolerance;
-
     public AutoAlign(Robot robot, double angle) {
         this(robot, angle, Constants.Auto.Align.SPEED);
     }
@@ -91,8 +91,8 @@ public class AutoAlign extends Command implements PIDOutput {
         controller.setContinuous();
         controller.setSetpoint(angle);
         controller.enable();
-        DriverStation.reportError("AutoAlign " + _message + " initialized to " + angle + " at " + speed, false);
-        DriverStation.reportError("kP="+kP+" , kI="+kI+", kD="+kD + ",T="+ Constants.Auto.Align.TOLERANCE, false);
+        RioLogger.info(this.toString(), _message + " initialized to " + angle + " at " + speed);
+        RioLogger.info(this.toString(), "kP="+kP+" , kI="+kI+", kD="+kD + ",T="+ Constants.Auto.Align.TOLERANCE);
         startTimeMillis = System.currentTimeMillis();
         _endTimeMillis = startTimeMillis + _timeout;
     }
@@ -105,13 +105,13 @@ public class AutoAlign extends Command implements PIDOutput {
         double roll = imu.getRoll();
 
         if (Math.abs(pitch) > Constants.Auto.MAX_PITCH) {
-            DriverStation.reportError("Excessive pitch detected (" + pitch + ")", false);
+            RioLogger.error(this.toString(), "Excessive pitch detected (" + pitch + ")");
             this.controller.disable();
             _aborted = true;
         }
 
         if (Math.abs(roll) > Constants.Auto.MAX_ROLL) {
-            DriverStation.reportError("Excessive roll detected (" + roll + ")", false);
+            RioLogger.error(this.toString(), "Excessive roll detected (" + roll + ")");
             this.controller.disable();
             _aborted = true;
         }
@@ -146,18 +146,18 @@ public class AutoAlign extends Command implements PIDOutput {
         }
 
         if(System.currentTimeMillis() >= _endTimeMillis){
-            DriverStation.reportError("AutoAlign timed out after " + _timeout + "ms at " + imu.getYaw(), false);
+            RioLogger.debug(this.toString(), ("AutoAlign timed out after " + _timeout + "ms at " + imu.getYaw()));
             return true;
         }
 
         if (controller.onTarget()) {
             if (_onTargetSince == 0) {
-                DriverStation.reportError("AutoAlign reached target " + imu.getYaw(), false);
+                RioLogger.info(this.toString(), ("AutoAlign reached target " + imu.getYaw()));
                 _onTargetSince = System.currentTimeMillis();
             }
 
             if (System.currentTimeMillis() > _onTargetSince + Constants.Auto.Align.STEADY_TIME) {
-                DriverStation.reportError("AutoAlign complete after " + Constants.Auto.Align.STEADY_TIME + " at " + imu.getYaw(), false);
+                RioLogger.info(this.toString(), ("AutoAlign complete after " + Constants.Auto.Align.STEADY_TIME + " at " + imu.getYaw()));
                 return  true;
             }
         }
@@ -168,9 +168,9 @@ public class AutoAlign extends Command implements PIDOutput {
     @Override
     protected void end() {
         driveTrain.setPower(0,0, true);
-        DriverStation.reportError("AutoAlign finished: angle = " + imu.getYaw() + ", time = " + (System.currentTimeMillis() - startTimeMillis), false);
+        RioLogger.info(this.toString(), "AutoAlign finished: angle = " + imu.getYaw() + ", time = " + (System.currentTimeMillis() - startTimeMillis));
         controller.disable();
-        DriverStation.reportError("AutoAlign.end() controller disabled", false);
+        RioLogger.debug(this.toString(), ("AutoAlign.end() controller disabled"));
     }
 
     @Override

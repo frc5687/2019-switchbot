@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.frc5687.switchbot.robot.Constants;
 import org.frc5687.switchbot.robot.subsystems.DriveTrain;
 import org.frc5687.switchbot.robot.subsystems.Shifter;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class Shift extends Command {
     private Shifter _shifter;
@@ -29,7 +30,7 @@ public class Shift extends Command {
 
     @Override
     protected void initialize() {
-        DriverStation.reportError("Shifting to " + gear, false);
+        RioLogger.info(this.toString(), "Shifting to " + gear);
         state = State.STOP_MOTOR;
     }
 
