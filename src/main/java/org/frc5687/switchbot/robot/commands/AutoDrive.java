@@ -28,8 +28,8 @@ public class AutoDrive extends Command {
     private boolean usePID;
     private boolean stopOnFinish;
     private double angle;
-
     private String debug;
+    private boolean _stopOnTape = false;
 
     private DriveTrain driveTrain;
     private AHRS imu;
@@ -56,6 +56,11 @@ public class AutoDrive extends Command {
     public AutoDrive(DriveTrain driveTrain, AHRS imu, double distance, double speed, boolean usePID, boolean stopOnFinish, long maxMillis, String debug) {
         this(driveTrain, imu, distance, speed, usePID, stopOnFinish, 1000, maxMillis, debug);
     }
+    public AutoDrive(DriveTrain driveTrain, AHRS imu, double distance, double speed, boolean usePID, boolean stopOnFinish, boolean stopOnTape, long maxMillis, String debug) {
+        this(driveTrain, imu, distance, speed, usePID, stopOnFinish, maxMillis, debug);
+        _stopOnTape=stopOnTape;
+    }
+
 
     /***
      * Drives for a set distance at a set speed.
@@ -140,6 +145,9 @@ public class AutoDrive extends Command {
 
     @Override
     protected boolean isFinished() {
+        if (_stopOnTape && driveTrain.ligtIsDetected()) {
+            return true;
+        }
         if (maxMillis>0 && endMillis!=Long.MAX_VALUE && System.currentTimeMillis() > endMillis) {
             DriverStation.reportError("AutoDrive for " + maxMillis + " timed out.", false);
             return true; }

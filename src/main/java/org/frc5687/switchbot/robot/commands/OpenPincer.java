@@ -28,8 +28,8 @@ public class OpenPincer extends Command {
     @Override
     protected void execute() {
         _pincer.open();
-        _pincer.setIntakeState(Pincer.IntakeState.INTAKE);
-        _pincer.runIntake(0);
+        //_pincer.setIntakeState(Pincer.IntakeState.INTAKE);
+        //_pincer.runIntake(0);
         _done = true;
     }
 }

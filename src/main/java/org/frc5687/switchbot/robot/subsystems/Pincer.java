@@ -50,7 +50,7 @@ public class Pincer extends Subsystem {
         _leftIntakeMotor.setNeutralMode(NeutralMode.Brake);
         _rightIntakeMotor.setNeutralMode(NeutralMode.Brake);
 
-        _cubeSensor = new AnalogInput(RobotMap.Analog.CUBE_IR);
+        //_cubeSensor = new AnalogInput(RobotMap.Analog.CUBE_IR);
     }
 
 

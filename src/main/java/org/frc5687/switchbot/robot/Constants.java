@@ -30,6 +30,11 @@ public class Constants {
             public static final int DETECTED_LOW_END = 500;
             public static final int DETECTED_HIGH_END = Integer.MAX_VALUE;
         }
+        public class LIGHT_SENSOR {
+            public static final boolean ENABLED = true;
+            public static final int DETECTED_VALUE = 161;
+            public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
+        }
     }
 
     public class Shifter {

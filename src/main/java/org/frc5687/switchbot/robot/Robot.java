@@ -1,6 +1,9 @@
 package org.frc5687.switchbot.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
@@ -22,6 +25,7 @@ public class Robot extends TimedRobot {
     private Pincer _pincer;
     private Arm _arm;
     private Shifter _shifter;
+
 
 
     private OI _oi;
@@ -50,6 +54,7 @@ public class Robot extends TimedRobot {
         // setPeriod(1 / Constants.CYCLES_PER_SECOND);
         LiveWindow.disableAllTelemetry();
         _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
+
 
         _pdp = new PDP();
         _oi = new OI();
@@ -149,6 +154,8 @@ public class Robot extends TimedRobot {
         _oi.poll();
         _ledStrip.poll();
         updateDashboard();
+        // set the motor output based on jostick position
+
     }
 
     public void updateDashboard() {
