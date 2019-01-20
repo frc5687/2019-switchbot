@@ -23,7 +23,7 @@ public class Pincer extends Subsystem {
     private VictorSPX _leftIntakeMotor;
     private VictorSPX _rightIntakeMotor;
     private IntakeState _intakeState = IntakeState.HOLD;
-    private AnalogInput _cubeSensor;
+
 
     public Pincer(Robot robot) {
         _robot = robot;
@@ -87,7 +87,7 @@ public class Pincer extends Subsystem {
     }
 
     private boolean isCubeDetected() {
-        return _cubeSensor.getValue()>= Constants.Intake.CUBE_DETECTED_THRESHOLD;
+        return false;
     }
 
     public void setIntakeState(IntakeState intakeState) {
@@ -118,7 +118,7 @@ public class Pincer extends Subsystem {
     }
 
     public void updateDashboard() {
-        SmartDashboard.putNumber("Pincer/IRSenson", _cubeSensor.getValue());
-        SmartDashboard.putBoolean("Pincer/CubeDetected", isCubeDetected());
+        // SmartDashboard.putNumber("Pincer/IRSenson", _cubeSensor.getValue());
+        // SmartDashboard.putBoolean("Pincer/CubeDetected", isCubeDetected());
     }
 }

@@ -221,9 +221,7 @@ public class AutoGroup extends CommandGroup {
 
     private void straightSwitch(Robot robot) {
         SmartDashboard.putString("AAutoRun", "StraightSwitch");
-        addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.FRONT_SWITCH));
-        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 110, .60, true, true, 5000, "StraightSwitch"));
-        addSequential(new Eject(robot.getPincer(), null));
+        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 48, .01, true, true, true,5000, "StraightSwitch"));
         return;
     }
 

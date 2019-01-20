@@ -35,7 +35,7 @@ public class Constants {
         }
         public class LIGHT_SENSOR {
             public static final boolean ENABLED = true;
-            public static final int DETECTED_VALUE = 161;
+            public static final int DETECTED_VALUE = 1600;
             public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
         }
     }

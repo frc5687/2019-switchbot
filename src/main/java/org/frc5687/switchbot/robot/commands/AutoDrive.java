@@ -145,7 +145,8 @@ public class AutoDrive extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (_stopOnTape && driveTrain.ligtIsDetected()) {
+        if (_stopOnTape && driveTrain.tapeIsDetected()) {
+            DriverStation.reportError("AutoDrive detected tape.", false);
             return true;
         }
         if (maxMillis>0 && endMillis!=Long.MAX_VALUE && System.currentTimeMillis() > endMillis) {

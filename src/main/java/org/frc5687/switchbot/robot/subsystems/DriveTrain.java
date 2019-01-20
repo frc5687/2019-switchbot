@@ -41,7 +41,6 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
-    private AnalogInput _irTape;
     private AnalogInput _lightSensor;
     public AHRS _imu;
     private double _rightOffset;
@@ -101,7 +100,6 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 
         resetDriveEncoders();
 
-        _irTape = new AnalogInput(RobotMap.Analog.TAPE_IR);
         _lightSensor = new AnalogInput(RobotMap.Analog.LIGHT_SENSOR);
 
 
@@ -361,19 +359,10 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 
     public DriveMode getDriveMode() { return _driveMode; }
 
+
     public boolean tapeIsDetected() {
-        if (!Constants.DriveTrain.TAPE_IR.ENABLED) {
-            return false;
-        }
-        int dist = _irTape.getValue();
-        return Constants.DriveTrain.TAPE_IR.DETECTED_HIGH_END > dist && dist > Constants.DriveTrain.TAPE_IR.DETECTED_LOW_END;
-    }
-    public boolean ligtIsDetected() {
-        if (!Constants.DriveTrain.LIGHT_SENSOR.ENABLED) {
-            return false;
-        }
         int value = _lightSensor.getValue();
-        return  value >= Constants.DriveTrain.LIGHT_SENSOR.DETECTED_VALUE;
+        return value >= Constants.DriveTrain.LIGHT_SENSOR.DETECTED_VALUE;
     }
 
 
@@ -445,8 +434,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
         SmartDashboard.putNumber("DriveTrain/RightSpeed", getRightSpeed());
         SmartDashboard.putNumber("DriveTrain/Yaw", _imu.getYaw());
-        SmartDashboard.putBoolean("DriveTrain/ligtIsDetected", ligtIsDetected());
-        SmartDashboard.putNumber("DriveTrain/IR Tape raw", _irTape.getValue());
+        SmartDashboard.putBoolean("DriveTrain/tapeIsDetected", tapeIsDetected());
+        SmartDashboard.putNumber("DriveTrain/IR Tape raw", _lightSensor.getValue());
 
     }
 

@@ -68,17 +68,17 @@ public class Robot extends TimedRobot {
         _autoChooser = new AutoChooser();
 
         try {
-            _camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-            _camera0.setResolution(320, 240);
-            _camera0.setFPS(10);
+            // _camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+            // _camera0.setResolution(320, 240);
+            // _camera0.setFPS(10);
         } catch (Exception e) {
             DriverStation.reportError(e.getMessage(), true);
         }
 
         try {
-            _camera1 = CameraServer.getInstance().startAutomaticCapture(1);
-            _camera1.setResolution(320, 240);
-            _camera1.setFPS(30);
+            // _camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+            // _camera1.setResolution(320, 240);
+            // _camera1.setFPS(30);
         } catch (Exception e) {
             DriverStation.reportError(e.getMessage(), true);
         }
@@ -110,16 +110,7 @@ public class Robot extends TimedRobot {
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
         int retries = 100;
-        while (gameData.length() < 2 && retries > 0) {
-            DriverStation.reportError("Gamedata is " + gameData + " retrying " + retries, false);
-            try {
-                Thread.sleep(5);
-                gameData = DriverStation.getInstance().getGameSpecificMessage();
-                if (gameData==null) { gameData = ""; }
-            } catch (Exception e) {
-            }
-            retries--;
-        }
+        gameData="LLL";
         SmartDashboard.putString("Auto/gameData", gameData);
         DriverStation.reportError("gameData before parse: " + gameData, false);
         int switchSide = 0;
