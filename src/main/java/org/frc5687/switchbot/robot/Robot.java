@@ -1,6 +1,9 @@
 package org.frc5687.switchbot.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
@@ -22,6 +25,7 @@ public class Robot extends TimedRobot {
     private Pincer _pincer;
     private Arm _arm;
     private Shifter _shifter;
+
 
 
     private OI _oi;
@@ -51,6 +55,7 @@ public class Robot extends TimedRobot {
         LiveWindow.disableAllTelemetry();
         _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
 
+
         _pdp = new PDP();
         _oi = new OI();
         _ledStrip = new LEDStrip();
@@ -63,17 +68,17 @@ public class Robot extends TimedRobot {
         _autoChooser = new AutoChooser();
 
         try {
-            _camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-            _camera0.setResolution(320, 240);
-            _camera0.setFPS(10);
+            // _camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+            // _camera0.setResolution(320, 240);
+            // _camera0.setFPS(10);
         } catch (Exception e) {
             DriverStation.reportError(e.getMessage(), true);
         }
 
         try {
-            _camera1 = CameraServer.getInstance().startAutomaticCapture(1);
-            _camera1.setResolution(320, 240);
-            _camera1.setFPS(30);
+            // _camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+            // _camera1.setResolution(320, 240);
+            // _camera1.setFPS(30);
         } catch (Exception e) {
             DriverStation.reportError(e.getMessage(), true);
         }
@@ -100,21 +105,12 @@ public class Robot extends TimedRobot {
         _imu.reset();
         _drivetrain.resetDriveEncoders();
         _drivetrain.enableBrakeMode();
-        _drivetrain.setCurrentLimiting(20);
+        _drivetrain.setCurrentLimiting(40);
 
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
         int retries = 100;
-        while (gameData.length() < 2 && retries > 0) {
-            DriverStation.reportError("Gamedata is " + gameData + " retrying " + retries, false);
-            try {
-                Thread.sleep(5);
-                gameData = DriverStation.getInstance().getGameSpecificMessage();
-                if (gameData==null) { gameData = ""; }
-            } catch (Exception e) {
-            }
-            retries--;
-        }
+        gameData="LLL";
         SmartDashboard.putString("Auto/gameData", gameData);
         DriverStation.reportError("gameData before parse: " + gameData, false);
         int switchSide = 0;
@@ -140,7 +136,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         if (_autoCommand != null) _autoCommand.cancel();
         _drivetrain.enableCoastMode();
-        _drivetrain.setCurrentLimiting(20);
+        _drivetrain.setCurrentLimiting(40);
     }
 
     @Override
@@ -149,6 +145,8 @@ public class Robot extends TimedRobot {
         _oi.poll();
         _ledStrip.poll();
         updateDashboard();
+        // set the motor output based on jostick position
+
     }
 
     public void updateDashboard() {

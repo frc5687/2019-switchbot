@@ -10,18 +10,21 @@ public class Constants {
         public static final double SENSITIVITY_LOW_GEAR = 0.5;
         public static final double SENSITIVITY_HIGH_GEAR = 0.7;
         public static final double ROTATION_SENSITIVITY = 0.0;
-        public static final double ROTATION_SENSITIVITY_HIGH_GEAR = 0.8;
+        public static final double ROTATION_SENSITIVITY_HIGH_GEAR = 0.7;
         public static final double ROTATION_SENSITIVITY_LOW_GEAR = 0.5;
 
         public static final double HIGH_POW = 1.0;
         public static final double LOW_POW = -HIGH_POW;
 
-        public static final boolean LEFT_MOTORS_INVERTED = true;
-        public static final boolean RIGHT_MOTORS_INVERTED = false;
+        public static final boolean LEFT_MOTORS_INVERTED = false;
+        public static final boolean RIGHT_MOTORS_INVERTED = true;
         public static final double MAX_SPEED_IPS = 11 * 12;
         public static final double CAP_SPEED_IPS = .8 * MAX_SPEED_IPS;
         public static final double MAX_ACCELERATION_IPSS = CAP_SPEED_IPS / 2;
         public static final double MAX_JERK_IPSSS = CAP_SPEED_IPS;
+
+        public static final double LEFT_RATIO = 1.96495824;
+        public static final double RIGHT_RATIO = -1.96495824;
 
         public class TAPE_IR {
             public static final boolean ENABLED = true;
@@ -29,6 +32,11 @@ public class Constants {
             public static final int SECURED_HIGH_END = Integer.MAX_VALUE;
             public static final int DETECTED_LOW_END = 500;
             public static final int DETECTED_HIGH_END = Integer.MAX_VALUE;
+        }
+        public class LIGHT_SENSOR {
+            public static final boolean ENABLED = true;
+            public static final int DETECTED_VALUE = 1600;
+            public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
         }
     }
 
@@ -44,7 +52,7 @@ public class Constants {
     }
 
     public static class Arm {
-        public static final double CURRENT_CAP = 40;
+        public static final double CURRENT_CAP = 5;
         public static final long TIMEOUT_CAP = 100;
         public static final double DEADBAND = 0.2;
         public static final double SENSITIVITY = 0.9;
@@ -98,8 +106,8 @@ public class Constants {
         public static final int PULSES_PER_ROTATION = 4096; // 1024 in quad mode. talon is 4096.
 
         public class WheelDiameter {
-            public static final double INCHES = 6.125;
-            public static final double METERS = 0.155575;
+            public static final double INCHES = 4;
+            public static final double METERS = 0.1016;
         }
         public static final double GEAR_RATIO = 2.25;
         public class DistancePerRotation {
@@ -112,7 +120,7 @@ public class Constants {
             public static final double INCHES = DistancePerRotation.INCHES / PULSES_PER_ROTATION;
         }
 
-        public static final double SCALAR_RATIO = 8;
+        public static final double SCALAR_RATIO = 1;
         public static final double MAX_PERIOD = 5;
 
         public class Track {

@@ -84,7 +84,8 @@ public class OI {
         _driverLeftTrigger.whenPressed(new OpenPincer(robot.getPincer()));
         _driverLeftTrigger.whenReleased(new ClosePincer(robot.getPincer()));
 
-        _driverRightTrigger.whenPressed(new Eject(robot.getPincer(), this));
+        _driverRightTrigger.whenPressed(new IntakeOnly(robot.getPincer()));
+        _driverRightTrigger.whenReleased(new Eject(robot.getPincer(), this));
 
         _driverLeftBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
         _driverRightBumper.whenPressed(new Shift(robot.getDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
@@ -92,7 +93,8 @@ public class OI {
         _operatorLeftTrigger.whenPressed(new OpenPincer(robot.getPincer()));
         _operatorLeftTrigger.whenReleased(new ClosePincer(robot.getPincer()));
 
-        _operatorRightTrigger.whenPressed(new Eject(robot.getPincer(), this));
+        _operatorRightTrigger.whenPressed(new IntakeOnly(robot.getPincer()));
+        _operatorRightTrigger.whenReleased(new Eject(robot.getPincer(), this));
         //_operatorLeftBumper.whenPressed(new SwitchDriveMode(robot.getDriveTrain(), DriveTrain.DriveMode.TANK));
         //_operatorRightBumper.whenPressed(new SwitchDriveMode(robot.getDriveTrain(), DriveTrain.DriveMode.CHEESY_ARCADE));
 
@@ -103,7 +105,7 @@ public class OI {
 
         _driverYButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.UP));
         _driverXButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.FRONT_SWITCH));
-        _driverBButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.BACK_SWITCH));
+        _driverBButton.whenPressed(new IntakeOnly(robot.getPincer()));
         _driverAButton.whenPressed(new AutoAlignToTarget(robot, .5, 5000, 1.0  ));
 
 
