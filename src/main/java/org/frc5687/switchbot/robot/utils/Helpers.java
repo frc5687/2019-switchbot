@@ -18,6 +18,16 @@ public class Helpers {
         return value;
     }
 
+    public static double limit(double value, double limitVal) {
+        if (value > limitVal) {
+            return limitVal;
+        }
+        if (value < -limitVal) {
+            return -limitVal;
+        }
+        return value;
+    }
+
     /**
      * Returns 0.0 if the given value is within the specified range around zero. The remaining range
      * between the deadband and 1.0 is scaled from 0.0 to 1.0.

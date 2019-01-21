@@ -10,6 +10,8 @@ public class RobotMap {
         public static final int LEFT_INTAKE_VICTORSPX = 0;
         public static final int RIGHT_INTAKE_VICTORSPX = 1;
 
+        public static final int INTAKE_MOTOR = 7;
+        public static final int ELEVATOR_MOTOR = 15;
     }
 
     public static class PWM {

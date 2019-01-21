@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
     private Pincer _pincer;
     private Arm _arm;
     private Shifter _shifter;
-
+    private Climber _climber;
 
 
     private OI _oi;
@@ -63,9 +63,9 @@ public class Robot extends TimedRobot {
         _pincer = new Pincer(_instance);
         _arm = new Arm(_instance);
         _shifter = new Shifter(_instance);
-
         _oi.initializeButtons(_instance);
         _autoChooser = new AutoChooser();
+        _climber = new Climber(this);
 
         try {
             // _camera0 = CameraServer.getInstance().startAutomaticCapture(0);

@@ -162,14 +162,16 @@ public class OI {
     }
 
     public double getArmSpeed() {
-        double speed = -getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.LEFT_Y.getNumber()) * Constants.Arm.SPEED_MAX;
-        speed = applyDeadband(speed, Constants.Arm.DEADBAND);
-        return applySensitivityFactor(speed, Constants.Arm.SENSITIVITY);
+        return 0;
+//        double speed = -getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.LEFT_Y.getNumber()) * Constants.Arm.SPEED_MAX;
+//        speed = applyDeadband(speed, Constants.Arm.DEADBAND);
+//        return applySensitivityFactor(speed, Constants.Arm.SENSITIVITY);
     }
     public double getArmSetpointSpeed() {
-        double speed = -getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_Y.getNumber()) * Constants.Arm.SPEED_MAX;
-        speed = applyDeadband(speed, Constants.Arm.DEADBAND);
-        return applySensitivityFactor(speed, Constants.Arm.SENSITIVITY);
+        return 0;
+//        double speed = -getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_Y.getNumber()) * Constants.Arm.SPEED_MAX;
+//        speed = applyDeadband(speed, Constants.Arm.DEADBAND);
+//        return applySensitivityFactor(speed, Constants.Arm.SENSITIVITY);
     }
 
     public void rumbleLeft() {
@@ -193,4 +195,15 @@ public class OI {
         }
     }
 
+    public double getIntakeSpeed() {
+        double speed = -getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.LEFT_Y.getNumber()) * Constants.CLIMBER.MAX_INTAKE_SPEED;
+        speed = applyDeadband(speed, Constants.CLIMBER.INTAKE_DEADBAND);
+        return applySensitivityFactor(speed, Constants.CLIMBER.INTAKE_SENSITIVITY);
+    }
+
+    public double getElevatorSpeed() {
+        double speed = -getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_Y.getNumber()) * Constants.CLIMBER.MAX_ELEVATOR_SPEED;
+        speed = applyDeadband(speed, Constants.CLIMBER.ELEVATOR_DEADBAND);
+        return applySensitivityFactor(speed, Constants.CLIMBER.ELEVATOR_SENSITIVITY);
+    }
 }

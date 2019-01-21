@@ -270,4 +270,12 @@ public class Constants {
         public static final double TOLERANCE = 0.02;
     }
 
+    public static class CLIMBER {
+        public static final double MAX_INTAKE_SPEED = 0.5;
+        public static final double MAX_ELEVATOR_SPEED = 0.5;
+        public static final double INTAKE_SENSITIVITY = 0.5;
+        public static final double INTAKE_DEADBAND = 0.1;
+        public static final double ELEVATOR_DEADBAND = 0.1;
+        public static final double ELEVATOR_SENSITIVITY = 0.5;
+    }
 }
