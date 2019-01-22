@@ -14,6 +14,7 @@ import org.frc5687.switchbot.robot.commands.AutoAlignToTarget;
 import org.frc5687.switchbot.robot.commands.AutoGroup;
 import org.frc5687.switchbot.robot.subsystems.*;
 import org.frc5687.switchbot.robot.utils.AutoChooser;
+import org.frc5687.switchbot.robot.utils.Limelight;
 import org.frc5687.switchbot.robot.utils.PDP;
 
 public class Robot extends TimedRobot {
@@ -25,7 +26,7 @@ public class Robot extends TimedRobot {
     private Pincer _pincer;
     private Arm _arm;
     private Shifter _shifter;
-
+    private Limelight _limelight;
 
 
     private OI _oi;
@@ -54,7 +55,7 @@ public class Robot extends TimedRobot {
         // setPeriod(1 / Constants.CYCLES_PER_SECOND);
         LiveWindow.disableAllTelemetry();
         _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
-
+        _limelight = new Limelight();
 
         _pdp = new PDP();
         _oi = new OI();
@@ -165,4 +166,5 @@ public class Robot extends TimedRobot {
     public Shifter getShifter() { return _shifter; }
     public AHRS getIMU() { return _imu; }
     public LEDStrip getLEDStrip() { return _ledStrip; }
+    public Limelight get_limelight() { return _limelight; }
 }

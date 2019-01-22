@@ -18,7 +18,7 @@ public class IRDistanceSensor extends AnalogInput {
     }
 
     public double getDistance() {
-        return _coefficient * Math.pow(getRaw(), _power) / 2.54;
+        return (_coefficient * Math.pow(getRaw(), _power)) / 2.54;
 
     }
     @Override
@@ -29,10 +29,11 @@ public class IRDistanceSensor extends AnalogInput {
 
 
     public enum Type {
-        SHORT(0), // 4-30cm
-        MEDIUM(1), // 4-30cm
-        LONG(2), // 4-30cm
-        ULTRALONG(3);
+        VERYSHORT(0), //
+        SHORT(2),     // 4-30cm
+        MEDIUM(3),    // 10-80cm
+        LONG(3),      // 15-150cm
+        ULTRALONG(4); // 100-500cm
 
         private int _value;
 
@@ -49,19 +50,23 @@ public class IRDistanceSensor extends AnalogInput {
     /**
      * a in the voltage-to-distance equation distance = a * voltage ^ b
      */
-    private static final double[] _coefficients = {
+    private static final double[] _coefficients =  {
+            0,
             27.385,
-            27.385,
-            27.385,
-            27.385};
+            16.646,
+            0,
+            0
+    };
 
     /**
      * b in the voltage-to-distance equation distance = a * voltage ^ b
      */
     private static final double[] _powers = {
+            0,
             -1.203,
-            -1.203,
-            -1.203,
-            -1.203};
+            -0.851,
+            0,
+            0
+    };
 
 }
