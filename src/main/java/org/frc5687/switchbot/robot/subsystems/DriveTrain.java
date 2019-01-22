@@ -92,8 +92,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
         // Configure the encoders
-        _leftEncoder = new Encoder(RobotMap.DIO.DRIVE_LEFT_ENCODER_A, RobotMap.DIO.DRIVE_LEFT_ENCODER_B);
-        _rightEncoder = new Encoder(RobotMap.DIO.DRIVE_RIGHT_ENCODER_A,RobotMap.DIO.DRIVE_RIGHT_ENCODER_B);
+        _leftEncoder = new Encoder(RobotMap.DIO.DRIVE_LEFT_ENCODER_B, RobotMap.DIO.DRIVE_LEFT_ENCODER_A);
+        _rightEncoder = new Encoder(RobotMap.DIO.DRIVE_RIGHT_ENCODER_B,RobotMap.DIO.DRIVE_RIGHT_ENCODER_A);
 
         resetDriveEncoders();
 
