@@ -102,8 +102,8 @@ public class OI {
         _operatorAButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.FRONT_FLAT));
 
         _driverYButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.UP));
-        _driverXButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.FRONT_SWITCH));
-        _driverBButton.whenPressed(new AutoDriveToTarget(robot, 5, .2, 5000, ""));
+        _driverXButton.whenPressed(new AutoDriveToTarget(robot, 5, .2, 5000, ""));
+        _driverBButton.whenPressed(new IntakeOnly(robot.getPincer()));
         _driverAButton.whenPressed(new AutoAlignToTarget(robot, .5, 5000, 1.0  ));
 
 
@@ -114,7 +114,7 @@ public class OI {
     }
 
     public boolean isAutoDrivePressed() {
-        return _driverBButton.get();
+        return _driverXButton.get();
     }
 
     public double getDriveSpeed(DriveTrain.DriveMode driveMode) {
