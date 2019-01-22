@@ -159,7 +159,7 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
         }
         SmartDashboard.putNumber("AutoAlignToTarget/pidOut", pidOut);
         if (_driveTrainBehavior == DriveTrainBehavior.bothSides) {
-            driveTrain.setPower(pidOut, -pidOut, true); // positive output is clockwise
+            driveTrain.setPower(-pidOut, pidOut, true); // positive output is clockwise
         } else if (_driveTrainBehavior == DriveTrainBehavior.rightOnly) {
             driveTrain.setPower(0, -pidOut);
         } else if (_driveTrainBehavior == DriveTrainBehavior.leftOnly) {
