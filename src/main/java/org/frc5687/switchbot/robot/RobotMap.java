@@ -36,6 +36,7 @@ public class RobotMap {
         public static final int ARM_POTENTIOMETER = 0;
         public static final int AUTO_SELECTOR = 1;
         public static final int LIGHT_SENSOR = 2;
+        public static final int DISTANCE_SENSOR = 3;
     }
 
     public static class DIO {

@@ -20,6 +20,7 @@ import org.frc5687.switchbot.robot.Robot;
 import org.frc5687.switchbot.robot.RobotMap;
 import org.frc5687.switchbot.robot.commands.AllDrive;
 import org.frc5687.switchbot.robot.utils.Helpers;
+import org.frc5687.switchbot.robot.utils.IRDistanceSensor;
 
 import static org.frc5687.switchbot.robot.utils.Helpers.limit;
 
@@ -48,6 +49,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     private double _lastLeftPosition = 0;
     private double _lastRightPosition = 0;
 
+    private IRDistanceSensor _irDistanceSensor;
+
     public DriveTrain(Robot robot) {
         _robot = robot;
         _imu = robot.getIMU();
@@ -57,6 +60,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _leftFollower = new CANSparkMax(RobotMap.CAN.LEFT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
         _rightFollower = new CANSparkMax(RobotMap.CAN.RIGHT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+        _irDistanceSensor = new IRDistanceSensor(RobotMap.Analog.DISTANCE_SENSOR, IRDistanceSensor.Type.MEDIUM);
         // Motor Initialization
 
         // Setup followers to follow their master
@@ -407,7 +411,9 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         SmartDashboard.putString("DriveTrain/neutralMode", "Coast");
     }
 
-
+    public IRDistanceSensor getIRDistanceSensor() {
+        return _irDistanceSensor;
+    }
 
     public enum DriveMode {
         TANK(0),
