@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
         _drivetrain.resetDriveEncoders();
         _drivetrain.enableBrakeMode();
         _drivetrain.setCurrentLimiting(40);
-
+        RioLogger.getInstance().init();
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
         int retries = 100;
@@ -137,10 +137,18 @@ public class Robot extends TimedRobot {
         updateDashboard();
     }
 
+    @Override
+    public void disabledInit(){
+        RioLogger.getInstance().forceSync();
+        RioLogger.getInstance().close();
+    }
 
     @Override
     public void teleopInit() {
-        if (_autoCommand != null) _autoCommand.cancel();
+        RioLogger.getInstance().init();
+        if (_autoCommand != null) {
+            _autoCommand.cancel();
+        }
         _drivetrain.enableCoastMode();
         _drivetrain.setCurrentLimiting(40);
     }

@@ -1,14 +1,22 @@
 package org.frc5687.switchbot.robot.utils;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Vector;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
+import org.frc5687.switchbot.robot.Constants;
+
 import java.io.BufferedWriter;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import java.io.File;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.MethodHandle;
+import static java.lang.invoke.MethodType.*;
+
 //Imported from RobotCasserole2017
 public class RioLogger {
     private static RioLogger _instance;
@@ -40,11 +48,11 @@ public class RioLogger {
     private FileWriter fwriter;
     long log_write_index;
     String log_name = null;
-    String output_dir = "/U/data_captures/"; // USB drive is mounted to /U on roboRIO
+    String output_dir = "/home/lvuser/"; // USB drive is mounted to /U on roboRIO
     BufferedWriter log_file = null;
     boolean log_open = false;
 
-    public int init(String[] data_fields, String[] units_fields) {
+    public int init() {
 
         if (log_open) {
             System.out.println("Warning - log is already open!");
@@ -57,42 +65,34 @@ public class RioLogger {
             log_write_index = 0;
 
             // Determine a unique file name
-            log_name = output_dir + "log_" + getDateTimeString() + ".csv";
-
+            log_name = output_dir + "log_" + getDateTimeString() + ".txt";
+            File fileText = new File(log_name);
             // Open File
             FileWriter fstream = new FileWriter(log_name, true);
             log_file = new BufferedWriter(fstream);
-
-            // Write user-defined header line
-            for (String header_txt : data_fields) {
-                log_file.write(header_txt + ", ");
-            }
             // End of line
             log_file.write("\n");
-
-
-            // Write user-defined units line
-            for (String header_txt : units_fields) {
-                log_file.write(header_txt + ", ");
-            }
-            // End of line
-            log_file.write("\n");
+            log_open = true;
 
         }
         // Catch ALL the errors!!!
         catch (IOException e) {
+
             System.out.println("Error initializing log file: " + e.getMessage());
             return -1;
         }
         System.out.println("done!");
         log_open = true;
+
         return 0;
     }
+
     private String getDateTimeString() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
         df.setTimeZone(TimeZone.getTimeZone("US/Eastern"));
         return df.format(new Date());
     }
+
     public int writeData(String... data_elements) {
         String line_to_write = "";
 
@@ -105,14 +105,16 @@ public class RioLogger {
 
             // Write user-defined data
             for (String data_val : data_elements) {
-                line_to_write = line_to_write.concat(data_val + " ");
+                line_to_write += data_val;
             }
 
             // End of line
-            line_to_write = line_to_write.concat("\n");
+            line_to_write = line_to_write + "\n";
 
             // write constructed string out to file
+
             log_file.write(line_to_write);
+
 
         }
         // Catch ALL the errors!!!
@@ -178,8 +180,6 @@ public class RioLogger {
             return -1;
         }
         return 0;
-
     }
-
 }
 
