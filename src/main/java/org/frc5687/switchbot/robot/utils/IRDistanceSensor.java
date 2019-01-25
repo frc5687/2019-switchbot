@@ -30,8 +30,8 @@ public class IRDistanceSensor extends AnalogInput {
 
     public enum Type {
         VERYSHORT(0), //
-        SHORT(2),     // 4-30cm
-        MEDIUM(3),    // 10-80cm
+        SHORT(1),     // 4-30cm
+        MEDIUM(2),    // 10-80cm
         LONG(3),      // 15-150cm
         ULTRALONG(4); // 100-500cm
 
