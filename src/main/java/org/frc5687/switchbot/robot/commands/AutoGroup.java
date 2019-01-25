@@ -196,25 +196,18 @@ public class AutoGroup extends CommandGroup {
 
     private void buildFarLeftCube(Robot robot) {
         SmartDashboard.putString("AAutoRun", "FarLeftSwitch");
-
-        // First attack - delivering starter cube to left side
-        addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.UP));
-        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 160, 0.6, true, true, 5000, "Attack1"));
-        addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.FRONT_SWITCH));
-        addSequential(new AutoAlign(robot, 90, 1.0, 2000, 1.0, AutoAlign.DriveTrainBehavior.bothSides, "right 90deg"));
-        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 24, 1.0, true, true, 3000, "Attack2"));
-        addSequential(new Eject(robot.getPincer(), null));
+        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 100, 0.3, false, false, 5000, "Attack1"));
     }
 
     private void buildFarRightCube(Robot robot) {
         SmartDashboard.putString("AAutoRun", "FarRightSwitch");
-        // First attack - delivering starter cube to left side
-        //addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.UP));
+         //First attack - delivering starter cube to left side
+        addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.UP));
         addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 48, 0.6, true, true, 5000, "Attack1"));
-        //addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.FRONT_SWITCH));
-        //addSequential(new AutoAlign(robot, -90, 1.0, 2000, 1.0, AutoAlign.DriveTrainBehavior.bothSides, "left 90deg"));
-        //addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 24, 1.0, true, true, 3000, "Attack2"));
-        //addSequential(new Eject(robot.getPincer(), null));
+        addParallel(new MoveArmToSetpoint(robot.getArm(), null, Constants.Arm.FRONT_SWITCH));
+        addSequential(new AutoAlign(robot, -90, 1.0, 2000, 1.0, AutoAlign.DriveTrainBehavior.bothSides, "left 90deg"));
+        addSequential(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 24, 1.0, true, true, 3000, "Attack2"));
+        addSequential(new Eject(robot.getPincer(), null));
     }
 
 

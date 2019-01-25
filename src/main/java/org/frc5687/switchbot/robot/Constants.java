@@ -7,11 +7,11 @@ public class Constants {
 
     public static class DriveTrain {
         public static final double DEADBAND = 0.1;
-        public static final double SENSITIVITY_LOW_GEAR = 0.5;
-        public static final double SENSITIVITY_HIGH_GEAR = 0.7;
+        public static final double SENSITIVITY_LOW_GEAR = 0.8;
+        public static final double SENSITIVITY_HIGH_GEAR = 0.9;
         public static final double ROTATION_SENSITIVITY = 0.0;
-        public static final double ROTATION_SENSITIVITY_HIGH_GEAR = 0.7;
-        public static final double ROTATION_SENSITIVITY_LOW_GEAR = 0.5;
+        public static final double ROTATION_SENSITIVITY_HIGH_GEAR = 0.9;
+        public static final double ROTATION_SENSITIVITY_LOW_GEAR = 0.8;
 
         public static final double HIGH_POW = 1.0;
         public static final double LOW_POW = -HIGH_POW;
@@ -34,6 +34,18 @@ public class Constants {
             public static final int DETECTED_HIGH_END = Integer.MAX_VALUE;
         }
         public class LIGHT_SENSOR {
+            public static final boolean ENABLED = true;
+            public static final int DETECTED_VALUE = 1600;
+            public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
+        }
+
+        public class LIGHT_SENSOR_Front {
+            public static final boolean ENABLED = true;
+            public static final int DETECTED_VALUE = 1600;
+            public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
+        }
+
+        public class LIGHT_SENSOR_BACK {
             public static final boolean ENABLED = true;
             public static final int DETECTED_VALUE = 1600;
             public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
