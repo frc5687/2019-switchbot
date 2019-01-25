@@ -460,6 +460,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         SmartDashboard.putNumber("DriveTrain/IR Tape raw", _lightSensor.getValue());
         SmartDashboard.putNumber("DriveTrain/IR Tape (front) raw", _lightSensorfront.getValue());
         SmartDashboard.putNumber("DriveTrain/IR Tape (back) raw", _lightSensorback.getValue());
+        SmartDashboard.putNumber("DriveTrain/IR Target Distance ", _irDistanceSensor.getValue());
+        SmartDashboard.putNumber("DriveTrain/IR Target Raw ", _irDistanceSensor.getRaw());
 
     }
 
