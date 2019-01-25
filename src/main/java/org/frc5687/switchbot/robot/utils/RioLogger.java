@@ -48,7 +48,7 @@ public class RioLogger {
     private FileWriter fwriter;
     long log_write_index;
     String log_name = null;
-    String output_dir = "/home/lvuser/"; // USB drive is mounted to /U on roboRIO
+    String output_dir = "/U/"; // USB drive is mounted to /U on roboRIO
     BufferedWriter log_file = null;
     boolean log_open = false;
 
@@ -81,7 +81,7 @@ public class RioLogger {
             System.out.println("Error initializing log file: " + e.getMessage());
             return -1;
         }
-        System.out.println("done!");
+        
         log_open = true;
 
         return 0;
@@ -105,7 +105,7 @@ public class RioLogger {
 
             // Write user-defined data
             for (String data_val : data_elements) {
-                line_to_write += data_val;
+                line_to_write += data_val + " ";
             }
 
             // End of line

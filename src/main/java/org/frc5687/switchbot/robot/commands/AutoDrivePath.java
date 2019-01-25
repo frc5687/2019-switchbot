@@ -39,11 +39,11 @@ public class AutoDrivePath extends Command {
                 new Waypoint(0, 0, 0),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
                 new Waypoint(distance, 0, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
         };
-        RioLogger.info(this.toString(), "Generating trajectory from 0,0,0 to " + distance + ",0,0 with dt=" + (1.0/Constants.CYCLES_PER_SECOND) + ",  ");
+        RioLogger.info(this.getClass().getSimpleName(), "Generating trajectory from 0,0,0 to " + distance + ",0,0 with dt=" + (1.0/Constants.CYCLES_PER_SECOND) + ",  ");
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 1.0 / Constants.CYCLES_PER_SECOND, Constants.DriveTrain.CAP_SPEED_IPS, Constants.DriveTrain.MAX_ACCELERATION_IPSS, Constants.DriveTrain.MAX_JERK_IPSSS);
         _trajectory = Pathfinder.generate(points, config);
 
-        RioLogger.info(this.toString(), _trajectory.length() + " segments.");
+        RioLogger.info(this.getClass().getSimpleName(), _trajectory.length() + " segments.");
 /*        for (int i = 0; i < _trajectory.length(); i++) {
             Trajectory.Segment s= _trajectory.get(i);
             DriverStation.reportError("Seg " + i + " x=" + s.x + ", pos=" + s.position + ", vel=" + s.velocity + ", acc="+s.acceleration,false);
@@ -76,11 +76,11 @@ public class AutoDrivePath extends Command {
     protected void execute() {
         double distance = _driveTrain.getDistance();
         _index++;
-        RioLogger.info(this.toString(), "Segment " + _index + " target: " + _follower.getSegment().x + " actual " + distance + " vel=" + _follower.getSegment().velocity);
+        RioLogger.info(this.getClass().getSimpleName(), "Segment " + _index + " target: " + _follower.getSegment().x + " actual " + distance + " vel=" + _follower.getSegment().velocity);
         double speed = _follower.calculate(distance);
         double angleFactor = _anglePID.get();
 
-        RioLogger.info(this.toString(), "Calculated speed: " + speed + " anglFactor " + angleFactor);
+        RioLogger.info(this.getClass().getSimpleName(), "Calculated speed: " + speed + " anglFactor " + angleFactor);
 
         _driveTrain.setPower(speed , speed, true);
     }

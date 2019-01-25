@@ -57,27 +57,27 @@ public class Arm extends PIDSubsystem {
         // See if we are drawing too much power...
         if (_pdp.getCurrent(RobotMap.PDP.ARM_VICTORSP) > Constants.Arm.CURRENT_CAP) {
             // If this is the start of an excess draw condition, record it
-            RioLogger.debug(this.toString(), "Arm cap of " + Constants.Arm.CURRENT_CAP + " exceeded at " + _pdp.getCurrent(RobotMap.PDP.ARM_VICTORSP));
+            RioLogger.debug(this.getClass().getSimpleName(), "Arm cap of " + Constants.Arm.CURRENT_CAP + " exceeded at " + _pdp.getCurrent(RobotMap.PDP.ARM_VICTORSP));
             if (_capTimeout==0) {
                 _capTimeout = System.currentTimeMillis() + Constants.Arm.TIMEOUT_CAP;
                 _capDirection = _direction;
-                RioLogger.info(this.toString(),  "Arm cap setting direction to " + _capDirection);
+                RioLogger.info(this.getClass().getSimpleName(),  "Arm cap setting direction to " + _capDirection);
             } else if (_capDirection !=_direction) {
                 // If the direction has changed, reset!
                 _capTimeout = 0;
                 _capDirection = 0;
-                RioLogger.info(this.toString(), "Arm cap resetting direction to " + _capDirection);
+                RioLogger.info(this.getClass().getSimpleName(), "Arm cap resetting direction to " + _capDirection);
             } else if (System.currentTimeMillis() > Constants.Arm.TIMEOUT_CAP) {
                 // Timeout exceeded...
                 _atFrontLimit  = _direction>0;
                 _atRearLimit = _direction<0;
-                RioLogger.info(this.toString(), "Arm cap atFront set to " + _atFrontLimit);
-                RioLogger.info(this.toString(),  "Arm cap atRear set to " + _atRearLimit);
+                RioLogger.info(this.getClass().getSimpleName(), "Arm cap atFront set to " + _atFrontLimit);
+                RioLogger.info(this.getClass().getSimpleName(),  "Arm cap atRear set to " + _atRearLimit);
             }
         } else {
             // Overdraw condition ended
             if (_capTimeout!=0) {
-                RioLogger.info(this.toString(), "Arm cap limit cleared " + _capDirection);
+                RioLogger.info(this.getClass().getSimpleName(), "Arm cap limit cleared " + _capDirection);
             }
             _capTimeout = 0;
             _capDirection = 0;
@@ -145,4 +145,3 @@ public class Arm extends PIDSubsystem {
         SmartDashboard.putBoolean("Arm/RearLimitSwitch", !_rearLimit.get());
     }
 }
-S

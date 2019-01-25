@@ -51,8 +51,9 @@ public class Robot extends TimedRobot {
         _instance = this;
         // setPeriod(1 / Constants.CYCLES_PER_SECOND);
         LiveWindow.disableAllTelemetry();
+        RioLogger.getInstance().init();
+        RioLogger.warn(this.getClass().getSimpleName(), "robotInit called");
         _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
-
         _pdp = new PDP();
         _oi = new OI();
         _ledStrip = new LEDStrip();
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot {
             _camera0.setResolution(320, 240);
             _camera0.setFPS(10);
         } catch (Exception e) {
-            RioLogger.error(this.toString(),  e.getMessage());
+            RioLogger.error(this.getClass().getSimpleName(),  e.getMessage());
         }
 
         try {
@@ -77,7 +78,7 @@ public class Robot extends TimedRobot {
             _camera1.setResolution(320, 240);
             _camera1.setFPS(30);
         } catch (Exception e) {
-            RioLogger.error(this.toString(), (e.getMessage()));
+            RioLogger.error(this.getClass().getSimpleName(), (e.getMessage()));
         }
 
     }
@@ -87,7 +88,7 @@ public class Robot extends TimedRobot {
         try {
             super.loopFunc();
         } catch (Throwable throwable) {
-            RioLogger.error(this.toString(), "Unhandled exception: " + throwable.toString());
+            RioLogger.error(this.getClass().getSimpleName(), "Unhandled exception: " + throwable.toString());
             System.exit(1);
         }
     }
@@ -108,7 +109,7 @@ public class Robot extends TimedRobot {
         if (gameData==null) { gameData = ""; }
         int retries = 100;
         while (gameData.length() < 2 && retries > 0) {
-            RioLogger.debug(this.toString(), "Gamedata is " + gameData + " retrying " + retries);
+            RioLogger.debug(this.getClass().getSimpleName(), "Gamedata is " + gameData + " retrying " + retries);
             try {
                 Thread.sleep(5);
                 gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -118,7 +119,7 @@ public class Robot extends TimedRobot {
             retries--;
         }
         SmartDashboard.putString("Auto/gameData", gameData);
-        RioLogger.debug(this.toString(),  "gameData before parse: " + gameData);
+        RioLogger.debug(this.getClass().getSimpleName(),  "gameData before parse: " + gameData);
         int switchSide = 0;
         if (gameData.length()>0) {
             switchSide = gameData.charAt(0)=='L' ? Constants.AutoChooser.LEFT : Constants.AutoChooser.RIGHT;
@@ -126,7 +127,7 @@ public class Robot extends TimedRobot {
         int autoPosition = _autoChooser.positionSwitchValue();
         SmartDashboard.putNumber("Auto/SwitchSide", switchSide);
         SmartDashboard.putNumber("Auto/Position", autoPosition);
-        RioLogger.info(this.toString(), "Running AutoGroup with position: " + autoPosition + ",  switchSide: " + switchSide);
+        RioLogger.info(this.getClass().getSimpleName(), "Running AutoGroup with position: " + autoPosition + ",  switchSide: " + switchSide);
         _autoCommand = new AutoGroup(autoPosition, switchSide, this);
         _autoCommand.start();
     }
@@ -145,7 +146,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        RioLogger.getInstance().init();
         if (_autoCommand != null) {
             _autoCommand.cancel();
         }

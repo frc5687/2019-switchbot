@@ -18,7 +18,7 @@ public class ClosePincer extends Command {
 
     @Override
     protected void initialize() {
-        RioLogger.info(this.toString(),  "Starting ClosePincer");
+        RioLogger.info(this.getClass().getSimpleName(),  "Starting ClosePincer");
         _done = false;
     }
 
@@ -38,6 +38,6 @@ public class ClosePincer extends Command {
 
     @Override
     protected void end() {
-        RioLogger.info(this.toString(),  "Ending ClosePincer");
+        RioLogger.info(this.getClass().getSimpleName(),  "Ending ClosePincer");
     }
 }

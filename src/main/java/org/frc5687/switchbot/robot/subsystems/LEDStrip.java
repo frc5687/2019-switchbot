@@ -83,7 +83,7 @@ public class LEDStrip extends Subsystem {
             SmartDashboard.putNumber("ledstrip/green", greenStrip.getRaw());
             SmartDashboard.putNumber("ledstrip/blue", blueStrip.getRaw());
         } catch (Exception e) {
-            RioLogger.error(this.toString(),  e.getMessage());
+            RioLogger.error(this.getClass().getSimpleName(),  e.getMessage());
         }
     }
 

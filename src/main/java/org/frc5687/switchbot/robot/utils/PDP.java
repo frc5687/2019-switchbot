@@ -50,7 +50,7 @@ public class PDP extends PowerDistributionPanel {
     public boolean excessiveCurrent(int channel, double threshold) {
         double current = getCurrent(channel);
         if (current >= threshold) {
-            RioLogger.debug(this.toString(), "PDP Channel: " + channel + " excessive at " + current);
+            RioLogger.debug(this.getClass().getSimpleName(), "PDP Channel: " + channel + " excessive at " + current);
             return true;
         }
         return false;
@@ -71,7 +71,7 @@ public class PDP extends PowerDistributionPanel {
                     }
                     Thread.sleep(250);
                 } catch (Exception e) {
-                    RioLogger.error(this.toString(),  "PDPCacheUpdater exception: " + e.toString());
+                    RioLogger.error(this.getClass().getSimpleName(),  "PDPCacheUpdater exception: " + e.toString());
                 }
             }
         }

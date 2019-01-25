@@ -111,7 +111,7 @@ public class AutoDrive extends Command {
         angleController.setSetpoint(angle==1000?driveTrain.getYaw():angle);
         angleController.enable();
 
-        RioLogger.info(this.toString(), "Auto Drive initialized: " + (debug==null?"":debug));
+        RioLogger.info(this.getClass().getSimpleName(), "Auto Drive initialized: " + (debug==null?"":debug));
     }
 
     @Override
@@ -142,31 +142,31 @@ public class AutoDrive extends Command {
     @Override
     protected boolean isFinished() {
         if (maxMillis>0 && endMillis!=Long.MAX_VALUE && System.currentTimeMillis() > endMillis) {
-            RioLogger.info(this.toString(), "AutoDrive for " + maxMillis + " timed out.");
+            RioLogger.info(this.getClass().getSimpleName(), "AutoDrive for " + maxMillis + " timed out.");
             return true; }
         if (usePID) {
             if (distanceController.onTarget()) {
                 if (settleTime == 0) {
-                    RioLogger.info(this.toString(), "AutoDrive nosettle complete at " + driveTrain.getDistance() + " inches");
+                    RioLogger.info(this.getClass().getSimpleName(), "AutoDrive nosettle complete at " + driveTrain.getDistance() + " inches");
                     return true;
                 }
                 if (settleEnd > 0) {
                     if (System.currentTimeMillis() > settleEnd) {
-                        RioLogger.info(this.toString(), "AutoDrive settled at " + driveTrain.getDistance() + " inches");
+                        RioLogger.info(this.getClass().getSimpleName(), "AutoDrive settled at " + driveTrain.getDistance() + " inches");
                         return true;
                     }
                 } else {
-                    RioLogger.info(this.toString(), "AutoDrive settling for " + settleTime + "ms");
+                    RioLogger.info(this.getClass().getSimpleName(), "AutoDrive settling for " + settleTime + "ms");
                     settleEnd = System.currentTimeMillis() + settleTime;
                 }
             } else {
                 if (settleEnd > 0) {
-                    RioLogger.info(this.toString(), "AutoDrive unsettled at " + driveTrain.getDistance() + " inches");
+                    RioLogger.info(this.getClass().getSimpleName(), "AutoDrive unsettled at " + driveTrain.getDistance() + " inches");
                     settleEnd = 0;
                 }
             }
         } else {
-            RioLogger.info(this.toString(), "AutoDrive nopid complete at " + driveTrain.getDistance() + " inches");
+            RioLogger.info(this.getClass().getSimpleName(), "AutoDrive nopid complete at " + driveTrain.getDistance() + " inches");
             return distance == 0 ? true : distance < 0 ? (driveTrain.getDistance() < distance) : (driveTrain.getDistance() >  distance);
         }
         return false;
@@ -176,14 +176,14 @@ public class AutoDrive extends Command {
 
     @Override
     protected void end() {
-        RioLogger.info(this.toString(), "AutoDrive Finished (" + driveTrain.getDistance() + ", " + (driveTrain.getYaw() - angleController.getSetpoint()) + ") " + (debug==null?"":debug));
+        RioLogger.info(this.getClass().getSimpleName(), "AutoDrive Finished (" + driveTrain.getDistance() + ", " + (driveTrain.getYaw() - angleController.getSetpoint()) + ") " + (debug==null?"":debug));
         driveTrain.enableCoastMode();
         angleController.disable();
         if (distanceController!=null) {
             distanceController.disable();
         }
         if (stopOnFinish) {
-            RioLogger.info(this.toString(), "Stopping at ." + driveTrain.getDistance());
+            RioLogger.info(this.getClass().getSimpleName(), "Stopping at ." + driveTrain.getDistance());
             driveTrain.enableBrakeMode();
             driveTrain.setPower(0, 0, true);
         }

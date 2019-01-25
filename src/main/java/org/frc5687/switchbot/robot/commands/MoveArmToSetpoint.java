@@ -36,7 +36,7 @@ public class MoveArmToSetpoint extends Command {
 
     @Override
     protected void end() {
-        RioLogger.info(this.toString(), "MoveArmToSetpointPID Ending");
+        RioLogger.info(this.getClass().getSimpleName(), "MoveArmToSetpointPID Ending");
 
     }
 
@@ -50,7 +50,7 @@ public class MoveArmToSetpoint extends Command {
     protected void initialize() {
         super.initialize();
         _endMillis = System.currentTimeMillis() + _timeout;
-        RioLogger.info(this.toString(), "Starting MoveArmToSetpointPID to " + _target + " for max " + _timeout + "ms");
+        RioLogger.info(this.getClass().getSimpleName(), "Starting MoveArmToSetpointPID to " + _target + " for max " + _timeout + "ms");
         _arm.setSetpoint(_target);
         _arm.setAbsoluteTolerance(1.0);
         _arm.enable();

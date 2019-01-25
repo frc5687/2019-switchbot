@@ -116,8 +116,8 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
         controller.setSetpoint(angle);
         controller.enable();
         SmartDashboard.putNumber("AutoAlignToTarget/setpoint", angle);
-        RioLogger.info(this.toString(), _message + " initialized to " + angle + " at " + speed);
-        RioLogger.info(this.toString(), "kP="+kP+" , kI="+kI+", kD="+kD + ",T="+ Constants.Auto.Align.TOLERANCE);
+        RioLogger.info(this.getClass().getSimpleName(), _message + " initialized to " + angle + " at " + speed);
+        RioLogger.info(this.getClass().getSimpleName(), "kP="+kP+" , kI="+kI+", kD="+kD + ",T="+ Constants.Auto.Align.TOLERANCE);
         startTimeMillis = System.currentTimeMillis();
         _endTimeMillis = startTimeMillis + _timeout;
 
@@ -175,18 +175,18 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
         }
 
         if((_oi!=null && !_oi.isAutoTargetPressed()) && System.currentTimeMillis() >= _endTimeMillis){
-            RioLogger.info(this.toString(), "AutoAlignToTarget timed out after " + _timeout + "ms at " + imu.getYaw());
+            RioLogger.info(this.getClass().getSimpleName(), "AutoAlignToTarget timed out after " + _timeout + "ms at " + imu.getYaw());
             return true;
         }
 
         if (controller.onTarget()) {
             if (_onTargetSince == 0) {
-                RioLogger.info(this.toString(), "AutoAlignToTarget reached target " + imu.getYaw());
+                RioLogger.info(this.getClass().getSimpleName(), "AutoAlignToTarget reached target " + imu.getYaw());
                 _onTargetSince = System.currentTimeMillis();
             }
 
             if ((_oi!=null && !_oi.isAutoTargetPressed()) && System.currentTimeMillis() > _onTargetSince + Constants.Auto.Align.STEADY_TIME) {
-                RioLogger.info(this.toString(), "AutoAlignToTarget complete after " + Constants.Auto.Align.STEADY_TIME + " at " + imu.getYaw());
+                RioLogger.info(this.getClass().getSimpleName(), "AutoAlignToTarget complete after " + Constants.Auto.Align.STEADY_TIME + " at " + imu.getYaw());
                 return  true;
             }
         }
@@ -197,9 +197,9 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
     @Override
     protected void end() {
         driveTrain.setPower(0,0, true);
-        RioLogger.info(this.toString(), "AutoAlign finished: angle = " + imu.getYaw() + ", time = " + (System.currentTimeMillis() - startTimeMillis));
+        RioLogger.info(this.getClass().getSimpleName(), "AutoAlign finished: angle = " + imu.getYaw() + ", time = " + (System.currentTimeMillis() - startTimeMillis));
         controller.disable();
-        RioLogger.debug(this.toString(), "AutoAlign.end() controller disabled");
+        RioLogger.debug(this.getClass().getSimpleName(), "AutoAlign.end() controller disabled");
     }
 
     @Override

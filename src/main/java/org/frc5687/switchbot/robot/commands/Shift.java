@@ -30,7 +30,7 @@ public class Shift extends Command {
 
     @Override
     protected void initialize() {
-        RioLogger.info(this.toString(), "Shifting to " + gear);
+        RioLogger.info(this.getClass().getSimpleName(), "Shifting to " + gear);
         state = State.STOP_MOTOR;
     }
 

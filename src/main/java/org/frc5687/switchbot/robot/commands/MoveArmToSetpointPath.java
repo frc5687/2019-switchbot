@@ -40,7 +40,7 @@ public class MoveArmToSetpointPath extends Command {
         _arm.disable();
         double _start = _arm.getAngle();
         _endMillis = System.currentTimeMillis() + _timeout;
-        RioLogger.info(this.toString(), "Starting MoveArmToSetpointPath from " + _start + " to " + _target + " for max " + _timeout + "ms");
+        RioLogger.info(this.getClass().getSimpleName(), "Starting MoveArmToSetpointPath from " + _start + " to " + _target + " for max " + _timeout + "ms");
 
         Waypoint[] points = new Waypoint[] {
                 new Waypoint(0, _start, 0),
@@ -66,7 +66,7 @@ public class MoveArmToSetpointPath extends Command {
 
     @Override
     protected void end() {
-        RioLogger.info(this.toString(), "MoveArmToSetpointPID Ending");
+        RioLogger.info(this.getClass().getSimpleName(), "MoveArmToSetpointPID Ending");
         if (!DriverStation.getInstance().isAutonomous()) {
             _arm.disable();
             _arm.drive(_oi.getArmSpeed());
