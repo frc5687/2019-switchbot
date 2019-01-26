@@ -56,3 +56,14 @@ jar {
 wrapper {
     gradleVersion = '5.0'
 }
+
+task gitInfo(dependsOn: build) {
+    description = 'Logs git branch and version to build'
+    def cmd = 'git rev-parse --abbrev-ref HEAD'
+    project.ext.branch = cmd.execute().text.trim()
+    cmd = 'git rev-parse --short HEAD'
+    project.ext.revision = cmd.execute().text.trim()
+
+    println '[branch] ' + project.branch
+    println '[commit] ' + project.revision
+}
