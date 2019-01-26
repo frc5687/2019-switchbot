@@ -9,10 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5687.switchbot.robot.Constants;
@@ -37,8 +34,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     CANSparkMax _rightMaster;
     CANSparkMax _rightFollower;
 
-    CANEncoder _leftEncoder;
-    CANEncoder _rightEncoder;
+    Encoder _leftEncoder;
+    Encoder _rightEncoder;
 
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
@@ -101,8 +98,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
         // Configure the encoders
-        _leftEncoder = _leftMaster.getEncoder();
-        _rightEncoder = _rightMaster.getEncoder();
+        _leftEncoder = new Encoder(RobotMap.DIO.DRIVE_LEFT_ENCODER_B, RobotMap.DIO.DRIVE_LEFT_ENCODER_A);
+        _rightEncoder = new Encoder(RobotMap.DIO.DRIVE_RIGHT_ENCODER_B,RobotMap.DIO.DRIVE_RIGHT_ENCODER_A);
 
         resetDriveEncoders();
 
@@ -205,12 +202,12 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
 
         if (speed==0.0) {
-            leftMotorOutput = -rotation;
-            rightMotorOutput = rotation;
+            leftMotorOutput = rotation;
+            rightMotorOutput = -rotation;
         } else {
             double delta = rotation * Math.abs(speed);
-            leftMotorOutput = speed - delta;
-            rightMotorOutput = speed + delta;
+            leftMotorOutput = speed + delta;
+            rightMotorOutput = speed - delta;
         }
 
         setPower(limit(leftMotorOutput), limit(rightMotorOutput));
@@ -237,11 +234,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public long getLeftTicks() {
-        return (long)_leftEncoder.getPosition();
+        return (long)_leftEncoder.get();
     }
 
     public long getRightTicks() {
-        return (long)_rightEncoder.getPosition();
+        return (long)_rightEncoder.get();
     }
 
     /**
@@ -249,7 +246,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public double getLeftDistance() {
-        double current = _leftEncoder.getPosition();
+        double current = _leftEncoder.get();
         if (current!=0) {
             _lastLeftPosition = current;
         }
@@ -257,7 +254,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public double getRightDistance() {
-        double current = _rightEncoder.getPosition();
+        double current = _rightEncoder.get();
         if (current!=0) {
             _lastRightPosition = current;
         }
@@ -359,11 +356,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public double getLeftRate() {
-        return _leftEncoder.getVelocity();
+        return _leftEncoder.getRate();
     }
 
     public double getRightRate() {
-        return _rightEncoder.getVelocity();
+        return _rightEncoder.getRate();
     }
 
     public DriveMode getDriveMode() { return _driveMode; }
@@ -447,8 +444,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public void updateDashboard() {
-        SmartDashboard.putNumber("DriveTrain/LeftDistance", _lastLeftPosition);
-        SmartDashboard.putNumber("DriveTrain/RIghtDistance", _lastRightPosition);
+        SmartDashboard.putNumber("DriveTrain/LeftDistance", getLeftDistance());
+        SmartDashboard.putNumber("DriveTrain/RIghtDistance", getRightDistance());
         SmartDashboard.putNumber("DriveTrain/LeftRate", getLeftRate());
         SmartDashboard.putNumber("DriveTrain/RightRate", getRightRate());
         SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
