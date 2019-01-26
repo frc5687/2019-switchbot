@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         if (_autoCommand != null) _autoCommand.cancel();
-        _drivetrain.enableCoastMode();
+        _drivetrain.enableBrakeMode();
         _drivetrain.setCurrentLimiting(40);
     }
 
