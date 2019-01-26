@@ -23,8 +23,8 @@ public class Constants {
         public static final double MAX_ACCELERATION_IPSS = CAP_SPEED_IPS / 2;
         public static final double MAX_JERK_IPSSS = CAP_SPEED_IPS;
 
-        public static final double LEFT_RATIO = .0266666666667;
-        public static final double RIGHT_RATIO = .0266666666667;
+        public static final double LEFT_RATIO = -2.1818181818181818;
+        public static final double RIGHT_RATIO = 2.1818181818181818;
 
 
 
