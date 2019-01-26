@@ -106,7 +106,7 @@ public class OI {
         _driverYButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.UP));
         _driverXButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.FRONT_SWITCH));
         _driverBButton.whenPressed(new IntakeOnly(robot.getPincer()));
-        _driverAButton.whenPressed(new AutoAlignToTarget(robot, .5, 5000, 1.0  ));
+        _driverAButton.whenPressed(new AutoDriveToTarget(robot, .5, 5, .5, "Initial approach"));
 
 
     }

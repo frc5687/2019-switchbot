@@ -14,7 +14,7 @@ public class IRDistanceSensor extends AnalogInput {
 
 
     public double getRaw() {
-        return super.getVoltage();
+        return super.getAverageVoltage();
     }
 
     public double getDistance() {
@@ -53,7 +53,7 @@ public class IRDistanceSensor extends AnalogInput {
     private static final double[] _coefficients =  {
             0,
             27.385,
-            16.646,
+            28.003,
             0,
             0
     };
@@ -64,7 +64,7 @@ public class IRDistanceSensor extends AnalogInput {
     private static final double[] _powers = {
             0,
             -1.203,
-            -0.851,
+            -1.207,
             0,
             0
     };

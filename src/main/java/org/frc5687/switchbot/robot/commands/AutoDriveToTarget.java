@@ -24,11 +24,10 @@ public class AutoDriveToTarget extends Command  {
 
     private double _angleTarget;
     private double _distanceTarget;
-
     private double _distanceTolerance;
 
     private double speed;
-    private long _timeout = 2000;
+    private long _timeout = 5000;
 
     private double _anglePIDOut;
     private double _distancePIDOut;
@@ -41,7 +40,7 @@ public class AutoDriveToTarget extends Command  {
     private String _message = "";
 
 
-    public AutoDriveToTarget(Robot robot, double speed, long timeout, double tolerance, String message) {
+    public AutoDriveToTarget(Robot robot, double speed, double distance, double tolerance, String message) {
         _driveTrain = robot.getDriveTrain();
         _imu = robot.getIMU();
         _limelight = robot.get_limelight();
@@ -49,13 +48,15 @@ public class AutoDriveToTarget extends Command  {
 
         requires(_driveTrain);
         this.speed = speed;
-        _timeout = timeout;
+        _distanceTarget = distance;
         _distanceTolerance = tolerance;
         _message = message;
     }
 
     @Override
     protected void initialize() {
+        _startTimeMillis = System.currentTimeMillis();
+        DriverStation.reportError("Running AutoDriveToTarget to " + _distanceTarget + " inches at " + speed, false);
         double kPAngle = Constants.Auto.DriveToTarget.kPAngle; // Double.parseDouble(SmartDashboard.getString("DB/String 0", ".04"));
         double kIAngle = Constants.Auto.DriveToTarget.kIAngle; // Double.parseDouble(SmartDashboard.getString("DB/String 1", ".006"));
         double kDAngle = Constants.Auto.DriveToTarget.kDAngle; //Double.parseDouble(SmartDashboard.getString("DB/String 2", ".09"));
@@ -72,9 +73,9 @@ public class AutoDriveToTarget extends Command  {
         double yawAngle = _imu.getAngle();
         _angleTarget = limeLightAngle + yawAngle;
 
-        SmartDashboard.putNumber("AutoAlignToTarget/startoffset", limeLightAngle);
-        SmartDashboard.putNumber("AutoAlignToTarget/startyaw", yawAngle);
-        SmartDashboard.putNumber("AutoAlignToTarget/angletarget", _angleTarget);
+        SmartDashboard.putNumber("AutoDriveToTarget/startoffset", limeLightAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/startyaw", yawAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/angletarget", _angleTarget);
 
         _angleController = new PIDController(kPAngle, kIAngle, kDAngle, _imu, new AngleListener(), 0.01);
         _angleController.setInputRange(Constants.Auto.MIN_IMU_ANGLE, Constants.Auto.MAX_IMU_ANGLE);
@@ -93,7 +94,6 @@ public class AutoDriveToTarget extends Command  {
         _distanceController.setSetpoint(_distanceTarget);
         _distanceController.enable();
 
-        _startTimeMillis = System.currentTimeMillis();
 
     }
 
@@ -103,21 +103,23 @@ public class AutoDriveToTarget extends Command  {
         double yawAngle = _imu.getAngle();
         _angleTarget = limeLightAngle + yawAngle;
 
-        SmartDashboard.putNumber("AutoAlignToTarget/startoffset", limeLightAngle);
-        SmartDashboard.putNumber("AutoAlignToTarget/startyaw", yawAngle);
-        SmartDashboard.putNumber("AutoAlignToTarget/target", _angleTarget);
+        SmartDashboard.putNumber("AutoDriveToTarget/startoffset", limeLightAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/startyaw", yawAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/target", _angleTarget);
 
         if (Math.abs(_angleTarget - _angleController.getSetpoint()) > Constants.Auto.DriveToTarget.ANGLE_TOLERANCE) {
             _angleController.setSetpoint(_angleTarget);
-            SmartDashboard.putNumber("AutoAlignToTarget/setpoint", _angleTarget);
+            SmartDashboard.putNumber("AutoDriveToTarget/anglesetpoint", _angleTarget);
         }
 
-        SmartDashboard.putBoolean("AutoAlignToTarget/onTarget", _angleController.onTarget());
-        SmartDashboard.putNumber("AutoAlignToTarget/yaw", _imu.getYaw());
+        SmartDashboard.putBoolean("AutoDriveToTarget/onTarget", _angleController.onTarget());
+        SmartDashboard.putNumber("AutoDriveToTarget/yaw", _imu.getYaw());
 
-        SmartDashboard.putNumber("AutoAlignToTarget/_anglePIDOut", _anglePIDOut);
+        SmartDashboard.putNumber("AutoDriveToTarget/anglePIDOut", _anglePIDOut);
+        SmartDashboard.putNumber("AutoDriveToTarget/distance/PIDOut", _distancePIDOut);
+        SmartDashboard.putNumber("AutoDriveToTarget/distance/target", _driveTrain.getIRDistanceSensor().getDistance());
 
-        _driveTrain.setPower(_distancePIDOut + _anglePIDOut, _distancePIDOut  -_anglePIDOut, true); // positive output is clockwise
+        _driveTrain.setPower(-_distancePIDOut - _anglePIDOut , -_distancePIDOut + _anglePIDOut, true); // positive output is clockwise
     }
 
 
@@ -135,9 +137,9 @@ public class AutoDriveToTarget extends Command  {
     @Override
     protected void end() {
         _driveTrain.setPower(0,0, true);
-        DriverStation.reportError("AutoAlign finished: _angleTarget = " + _imu.getYaw() + ", time = " + (System.currentTimeMillis() - _startTimeMillis), false);
+        DriverStation.reportError("AutoDriveToTarget finished: angle=" + _imu.getYaw() + ", distance=" + _driveTrain.getIRDistanceSensor().getDistance() + ", time=" + (System.currentTimeMillis() - _startTimeMillis), false);
+        _distanceController.disable();
         _angleController.disable();
-        DriverStation.reportError("AutoAlign.end() _angleController disabled", false);
     }
 
     private class AngleListener implements PIDOutput {
