@@ -133,7 +133,7 @@ public class AutoDriveToTarget extends Command  {
         SmartDashboard.putNumber("AutoDriveToTarget/distance/target", _driveTrain.getIRDistanceSensor().getDistance());
         SmartDashboard.putNumber("AutoDriveToTarget/distance/current", _driveTrain.getDistance());
 
-        _distancePIDOut = 0;
+        //_distancePIDOut = 0;
         _driveTrain.setPower(_distancePIDOut + _anglePIDOut , _distancePIDOut - _anglePIDOut, true); // positive output is clockwise
     }
 
