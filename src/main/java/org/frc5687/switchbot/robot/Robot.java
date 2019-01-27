@@ -16,6 +16,7 @@ import org.frc5687.switchbot.robot.subsystems.*;
 import org.frc5687.switchbot.robot.utils.AutoChooser;
 import org.frc5687.switchbot.robot.utils.PDP;
 import org.frc5687.switchbot.robot.utils.Version;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class Robot extends TimedRobot {
 
@@ -51,12 +52,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        DriverStation.reportError("Starting " + this.getClass().getCanonicalName() + " from branch " + Version.BRANCH, false);
+        LiveWindow.disableAllTelemetry();
+        RioLogger.getInstance().init();
+        RioLogger.info(this, "Starting " + this.getClass().getCanonicalName() + " from branch " + Version.BRANCH);
         _instance = this;
         // setPeriod(1 / Constants.CYCLES_PER_SECOND);
-        LiveWindow.disableAllTelemetry();
         _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
-
 
         _pdp = new PDP();
         _oi = new OI();
@@ -74,7 +75,7 @@ public class Robot extends TimedRobot {
             // _camera0.setResolution(320, 240);
             // _camera0.setFPS(10);
         } catch (Exception e) {
-            DriverStation.reportError(e.getMessage(), true);
+            RioLogger.error(this.getClass().getSimpleName(),  e.getMessage());
         }
 
         try {
@@ -82,7 +83,7 @@ public class Robot extends TimedRobot {
             // _camera1.setResolution(320, 240);
             // _camera1.setFPS(30);
         } catch (Exception e) {
-            DriverStation.reportError(e.getMessage(), true);
+            RioLogger.error(this.getClass().getSimpleName(), (e.getMessage()));
         }
 
     }
@@ -92,7 +93,7 @@ public class Robot extends TimedRobot {
         try {
             super.loopFunc();
         } catch (Throwable throwable) {
-            DriverStation.reportError("Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
+            RioLogger.error(this.getClass().getSimpleName(), "Unhandled exception: " + throwable.toString());
             System.exit(1);
         }
     }
@@ -108,13 +109,13 @@ public class Robot extends TimedRobot {
         _drivetrain.resetDriveEncoders();
         _drivetrain.enableBrakeMode();
         _drivetrain.setCurrentLimiting(40);
-
+        RioLogger.getInstance().init();
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
         int retries = 100;
         gameData="LLL";
         SmartDashboard.putString("Auto/gameData", gameData);
-        DriverStation.reportError("gameData before parse: " + gameData, false);
+        RioLogger.debug(this.getClass().getSimpleName(),  "gameData before parse: " + gameData);
         int switchSide = 0;
         if (gameData.length()>0) {
             switchSide = gameData.charAt(0)=='L' ? Constants.AutoChooser.LEFT : Constants.AutoChooser.RIGHT;
@@ -122,7 +123,7 @@ public class Robot extends TimedRobot {
         int autoPosition = _autoChooser.positionSwitchValue();
         SmartDashboard.putNumber("Auto/SwitchSide", switchSide);
         SmartDashboard.putNumber("Auto/Position", autoPosition);
-        DriverStation.reportError("Running AutoGroup with position: " + autoPosition + ",  switchSide: " + switchSide , false);
+        RioLogger.info(this.getClass().getSimpleName(), "Running AutoGroup with position: " + autoPosition + ",  switchSide: " + switchSide);
         _autoCommand = new AutoGroup(autoPosition, switchSide, this);
         _autoCommand.start();
     }
@@ -133,10 +134,17 @@ public class Robot extends TimedRobot {
         updateDashboard();
     }
 
+    @Override
+    public void disabledInit(){
+        RioLogger.getInstance().forceSync();
+        RioLogger.getInstance().close();
+    }
 
     @Override
     public void teleopInit() {
-        if (_autoCommand != null) _autoCommand.cancel();
+        if (_autoCommand != null) {
+            _autoCommand.cancel();
+        }
         _drivetrain.enableCoastMode();
         _drivetrain.setCurrentLimiting(40);
     }

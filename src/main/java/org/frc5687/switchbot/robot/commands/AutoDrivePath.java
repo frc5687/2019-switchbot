@@ -12,6 +12,7 @@ import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.DistanceFollower;
 import org.frc5687.switchbot.robot.Constants;
 import org.frc5687.switchbot.robot.subsystems.DriveTrain;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class AutoDrivePath extends Command {
     private double _distance;
@@ -38,11 +39,11 @@ public class AutoDrivePath extends Command {
                 new Waypoint(0, 0, 0),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
                 new Waypoint(distance, 0, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
         };
-        DriverStation.reportError("Generating trajctory from 0,0,0 to " + distance + ",0,0 with dt=" + (1.0/Constants.CYCLES_PER_SECOND) + ",  ", false);
+        RioLogger.info(this.getClass().getSimpleName(), "Generating trajectory from 0,0,0 to " + distance + ",0,0 with dt=" + (1.0/Constants.CYCLES_PER_SECOND) + ",  ");
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 1.0 / Constants.CYCLES_PER_SECOND, Constants.DriveTrain.CAP_SPEED_IPS, Constants.DriveTrain.MAX_ACCELERATION_IPSS, Constants.DriveTrain.MAX_JERK_IPSSS);
         _trajectory = Pathfinder.generate(points, config);
 
-        DriverStation.reportError("Generated " + _trajectory.length() + " segments.", false);
+        RioLogger.info(this.getClass().getSimpleName(), _trajectory.length() + " segments.");
 /*        for (int i = 0; i < _trajectory.length(); i++) {
             Trajectory.Segment s= _trajectory.get(i);
             DriverStation.reportError("Seg " + i + " x=" + s.x + ", pos=" + s.position + ", vel=" + s.velocity + ", acc="+s.acceleration,false);
@@ -75,11 +76,11 @@ public class AutoDrivePath extends Command {
     protected void execute() {
         double distance = _driveTrain.getDistance();
         _index++;
-        DriverStation.reportError("Segment " + _index + " target: " + _follower.getSegment().x + " actual " + distance + " vel=" + _follower.getSegment().velocity, false);
+        RioLogger.info(this.getClass().getSimpleName(), "Segment " + _index + " target: " + _follower.getSegment().x + " actual " + distance + " vel=" + _follower.getSegment().velocity);
         double speed = _follower.calculate(distance);
         double angleFactor = _anglePID.get();
 
-        DriverStation.reportError("Calculated speed: " + speed + " anglFactor " +angleFactor, false);
+        RioLogger.info(this.getClass().getSimpleName(), "Calculated speed: " + speed + " anglFactor " + angleFactor);
 
         _driveTrain.setPower(speed , speed, true);
     }

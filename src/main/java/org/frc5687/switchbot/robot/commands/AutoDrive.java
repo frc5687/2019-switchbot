@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5687.switchbot.robot.Constants;
 import org.frc5687.switchbot.robot.subsystems.DriveTrain;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 /**
  * Created by Ben Bernard on 6/9/2018.
@@ -115,7 +116,7 @@ public class AutoDrive extends Command {
         angleController.setSetpoint(angle==1000?driveTrain.getYaw():angle);
         angleController.enable();
 
-        DriverStation.reportError("Auto Drive initialized: " + (debug==null?"":debug), false);
+        RioLogger.info(this.getClass().getSimpleName(), "Auto Drive initialized: " + (debug==null?"":debug));
     }
 
     @Override
@@ -150,31 +151,31 @@ public class AutoDrive extends Command {
             return true;
         }
         if (maxMillis>0 && endMillis!=Long.MAX_VALUE && System.currentTimeMillis() > endMillis) {
-            DriverStation.reportError("AutoDrive for " + maxMillis + " timed out.", false);
+            RioLogger.info(this.getClass().getSimpleName(), "AutoDrive for " + maxMillis + " timed out.");
             return true; }
         if (usePID) {
             if (distanceController.onTarget()) {
                 if (settleTime == 0) {
-                    DriverStation.reportError("AutoDrive nosettle complete at " + driveTrain.getDistance() + " inches", false);
+                    RioLogger.info(this.getClass().getSimpleName(), "AutoDrive nosettle complete at " + driveTrain.getDistance() + " inches");
                     return true;
                 }
                 if (settleEnd > 0) {
                     if (System.currentTimeMillis() > settleEnd) {
-                        DriverStation.reportError("AutoDrive settled at " + driveTrain.getDistance() + " inches", false);
+                        RioLogger.info(this.getClass().getSimpleName(), "AutoDrive settled at " + driveTrain.getDistance() + " inches");
                         return true;
                     }
                 } else {
-                    DriverStation.reportError("AutoDrive settling for " + settleTime + "ms", false);
+                    RioLogger.info(this.getClass().getSimpleName(), "AutoDrive settling for " + settleTime + "ms");
                     settleEnd = System.currentTimeMillis() + settleTime;
                 }
             } else {
                 if (settleEnd > 0) {
-                    DriverStation.reportError("AutoDrive unsettled at " + driveTrain.getDistance() + " inches", false);
+                    RioLogger.info(this.getClass().getSimpleName(), "AutoDrive unsettled at " + driveTrain.getDistance() + " inches");
                     settleEnd = 0;
                 }
             }
         } else {
-            DriverStation.reportError("AutoDrive nopid complete at " + driveTrain.getDistance() + " inches", false);
+            RioLogger.info(this.getClass().getSimpleName(), "AutoDrive nopid complete at " + driveTrain.getDistance() + " inches");
             return distance == 0 ? true : distance < 0 ? (driveTrain.getDistance() < distance) : (driveTrain.getDistance() >  distance);
         }
         return false;
@@ -184,14 +185,14 @@ public class AutoDrive extends Command {
 
     @Override
     protected void end() {
-        DriverStation.reportError("AutoDrive Finished (" + driveTrain.getDistance() + ", " + (driveTrain.getYaw() - angleController.getSetpoint()) + ") " + (debug==null?"":debug), false);
+        RioLogger.info(this.getClass().getSimpleName(), "AutoDrive Finished (" + driveTrain.getDistance() + ", " + (driveTrain.getYaw() - angleController.getSetpoint()) + ") " + (debug==null?"":debug));
         driveTrain.enableCoastMode();
         angleController.disable();
         if (distanceController!=null) {
             distanceController.disable();
         }
         if (stopOnFinish) {
-            DriverStation.reportError("Stopping at ." + driveTrain.getDistance(), false);
+            RioLogger.info(this.getClass().getSimpleName(), "Stopping at ." + driveTrain.getDistance());
             driveTrain.enableBrakeMode();
             driveTrain.setPower(0, 0, true);
         }

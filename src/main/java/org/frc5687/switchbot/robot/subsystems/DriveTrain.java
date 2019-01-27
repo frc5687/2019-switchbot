@@ -17,6 +17,7 @@ import org.frc5687.switchbot.robot.Robot;
 import org.frc5687.switchbot.robot.RobotMap;
 import org.frc5687.switchbot.robot.commands.AllDrive;
 import org.frc5687.switchbot.robot.utils.Helpers;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 import static org.frc5687.switchbot.robot.utils.Helpers.limit;
 
@@ -115,7 +116,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
             _leftMaster.set(leftSpeed);
             _rightMaster.set(rightSpeed);
         } catch (Exception e) {
-            DriverStation.reportError("DriveTrain.setPower exception: " + e.toString(), false);
+            RioLogger.error(this.getClass().getSimpleName(), "DriveTrain.setPower exception: " + e.toString());
         }
         SmartDashboard.putNumber("DriveTrain/PowerRight", rightSpeed);
         SmartDashboard.putNumber("DriveTrain/PowerLeft", leftSpeed);
@@ -127,7 +128,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
 //            _leftMaster.setSelectedSensorPosition(0,0,0);
 //            _rightMaster.setSelectedSensorPosition(0, 0, 0);
         } catch (Exception e) {
-            DriverStation.reportError("DriveTrain.resetDriveEncoders exception. I suppose this is really bad. : " + e.toString(), false);
+            RioLogger.error(this.getClass().getSimpleName(), "DriveTrain.resetDriveEncoders exception. I suppose this is really bad. : " + e.toString());
         }
     }
 
@@ -387,7 +388,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
             _rightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         } catch (Exception e) {
-            DriverStation.reportError("DriveTrain.enableBrakeMode exception: " + e.toString(), false);
+            RioLogger.error(this.getClass().getSimpleName(), "DriveTrain.enableBrakeMode exception: " + e.toString());
         }
         SmartDashboard.putString("DriveTrain/neutralMode", "Brake");
     }
@@ -399,7 +400,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
             _leftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
             _rightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         } catch (Exception e) {
-            DriverStation.reportError("DriveTrain.enableCoastMode exception: " + e.toString(), false);
+            RioLogger.error(this.getClass().getSimpleName(),  "DriveTrain.enableCoastMode exception: " + e.toString());
         }
         SmartDashboard.putString("DriveTrain/neutralMode", "Coast");
     }
