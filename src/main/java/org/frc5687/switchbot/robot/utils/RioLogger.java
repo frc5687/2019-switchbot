@@ -41,6 +41,11 @@ public class RioLogger {
         log("info", source, message);
     }
 
+    public static void warn(Object source, String message) { warn(source.getClass().getSimpleName(), message); }
+    public static void error(Object source, String message) { error(source.getClass().getSimpleName(), message); }
+    public static void debug(Object source, String message) { debug(source.getClass().getSimpleName(), message); }
+    public static void info(Object source, String message) { info(source.getClass().getSimpleName(), message); }
+
     public static void log(String level, String source, String message) {
         getInstance().writeData( getInstance().getDateTimeString(), level, source, message);
     }

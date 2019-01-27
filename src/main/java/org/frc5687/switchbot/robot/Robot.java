@@ -1,6 +1,9 @@
 package org.frc5687.switchbot.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,6 +15,7 @@ import org.frc5687.switchbot.robot.commands.AutoGroup;
 import org.frc5687.switchbot.robot.subsystems.*;
 import org.frc5687.switchbot.robot.utils.AutoChooser;
 import org.frc5687.switchbot.robot.utils.PDP;
+import org.frc5687.switchbot.robot.utils.Version;
 import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class Robot extends TimedRobot {
@@ -48,12 +52,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        _instance = this;
-        // setPeriod(1 / Constants.CYCLES_PER_SECOND);
         LiveWindow.disableAllTelemetry();
         RioLogger.getInstance().init();
-        RioLogger.warn(this.getClass().getSimpleName(), "robotInit called");
+        RioLogger.info(this, "Starting " + this.getClass().getCanonicalName() + " from branch " + Version.BRANCH);
+        _instance = this;
+        // setPeriod(1 / Constants.CYCLES_PER_SECOND);
         _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
+
         _pdp = new PDP();
         _oi = new OI();
         _ledStrip = new LEDStrip();
@@ -66,17 +71,17 @@ public class Robot extends TimedRobot {
         _autoChooser = new AutoChooser();
 
         try {
-            _camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-            _camera0.setResolution(320, 240);
-            _camera0.setFPS(10);
+            // _camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+            // _camera0.setResolution(320, 240);
+            // _camera0.setFPS(10);
         } catch (Exception e) {
             RioLogger.error(this.getClass().getSimpleName(),  e.getMessage());
         }
 
         try {
-            _camera1 = CameraServer.getInstance().startAutomaticCapture(1);
-            _camera1.setResolution(320, 240);
-            _camera1.setFPS(30);
+            // _camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+            // _camera1.setResolution(320, 240);
+            // _camera1.setFPS(30);
         } catch (Exception e) {
             RioLogger.error(this.getClass().getSimpleName(), (e.getMessage()));
         }
@@ -108,16 +113,7 @@ public class Robot extends TimedRobot {
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
         int retries = 100;
-        while (gameData.length() < 2 && retries > 0) {
-            RioLogger.debug(this.getClass().getSimpleName(), "Gamedata is " + gameData + " retrying " + retries);
-            try {
-                Thread.sleep(5);
-                gameData = DriverStation.getInstance().getGameSpecificMessage();
-                if (gameData==null) { gameData = ""; }
-            } catch (Exception e) {
-            }
-            retries--;
-        }
+        gameData="LLL";
         SmartDashboard.putString("Auto/gameData", gameData);
         RioLogger.debug(this.getClass().getSimpleName(),  "gameData before parse: " + gameData);
         int switchSide = 0;
@@ -159,6 +155,8 @@ public class Robot extends TimedRobot {
         _oi.poll();
         _ledStrip.poll();
         updateDashboard();
+        // set the motor output based on jostick position
+
     }
 
     public void updateDashboard() {

@@ -9,10 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5687.switchbot.robot.Constants;
@@ -37,13 +34,17 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     CANSparkMax _rightMaster;
     CANSparkMax _rightFollower;
 
-    CANEncoder _leftEncoder;
-    CANEncoder _rightEncoder;
+    Encoder _leftEncoder;
+    Encoder _rightEncoder;
 
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
-    private AnalogInput _irTape;
+    private AnalogInput _lightSensor;
     public AHRS _imu;
+    private double _rightOffset;
+    private double _leftOffset;
+    private double _lastLeftPosition = 0;
+    private double _lastRightPosition = 0;
 
     public DriveTrain(Robot robot) {
         _robot = robot;
@@ -92,12 +93,12 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
         // Configure the encoders
-        _leftEncoder = _leftMaster.getEncoder();
-        _rightEncoder = _rightMaster.getEncoder();
+        _leftEncoder = new Encoder(RobotMap.DIO.DRIVE_LEFT_ENCODER_B, RobotMap.DIO.DRIVE_LEFT_ENCODER_A);
+        _rightEncoder = new Encoder(RobotMap.DIO.DRIVE_RIGHT_ENCODER_B,RobotMap.DIO.DRIVE_RIGHT_ENCODER_A);
 
         resetDriveEncoders();
 
-        _irTape = new AnalogInput(RobotMap.Analog.TAPE_IR);
+        _lightSensor = new AnalogInput(RobotMap.Analog.LIGHT_SENSOR);
 
 
     }
@@ -193,12 +194,12 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
 
         if (speed==0.0) {
-            leftMotorOutput = -rotation;
-            rightMotorOutput = rotation;
+            leftMotorOutput = rotation;
+            rightMotorOutput = -rotation;
         } else {
             double delta = rotation * Math.abs(speed);
-            leftMotorOutput = speed - delta;
-            rightMotorOutput = speed + delta;
+            leftMotorOutput = speed + delta;
+            rightMotorOutput = speed - delta;
         }
 
         setPower(limit(leftMotorOutput), limit(rightMotorOutput));
@@ -225,11 +226,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public long getLeftTicks() {
-        throw new RuntimeException();
+        return (long)_leftEncoder.get();
     }
 
     public long getRightTicks() {
-        throw new RuntimeException();
+        return (long)_rightEncoder.get();
     }
 
     /**
@@ -237,13 +238,20 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public double getLeftDistance() {
-        return _leftEncoder.getPosition();
+        double current = _leftEncoder.get();
+        if (current!=0) {
+            _lastLeftPosition = current;
+        }
+        return _lastLeftPosition * Constants.DriveTrain.LEFT_RATIO - _leftOffset;
     }
 
     public double getRightDistance() {
-        return _rightEncoder.getPosition();
+        double current = _rightEncoder.get();
+        if (current!=0) {
+            _lastRightPosition = current;
+        }
+        return _lastRightPosition * Constants.DriveTrain.RIGHT_RATIO - _rightOffset;
     }
-
 
     /**
      * @return average of leftDistance and rightDistance
@@ -340,22 +348,21 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public double getLeftRate() {
-        return _leftEncoder.getVelocity();
+        return _leftEncoder.getRate();
     }
 
     public double getRightRate() {
-        return _rightEncoder.getVelocity();
+        return _rightEncoder.getRate();
     }
 
     public DriveMode getDriveMode() { return _driveMode; }
 
+
     public boolean tapeIsDetected() {
-        if (!Constants.DriveTrain.TAPE_IR.ENABLED) {
-            return false;
-        }
-        int dist = _irTape.getValue();
-        return Constants.DriveTrain.TAPE_IR.DETECTED_HIGH_END > dist && dist > Constants.DriveTrain.TAPE_IR.DETECTED_LOW_END;
+        int value = _lightSensor.getValue();
+        return value >= Constants.DriveTrain.LIGHT_SENSOR.DETECTED_VALUE;
     }
+
 
     @Override
     public double pidGet() {
@@ -425,8 +432,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
         SmartDashboard.putNumber("DriveTrain/RightSpeed", getRightSpeed());
         SmartDashboard.putNumber("DriveTrain/Yaw", _imu.getYaw());
-        SmartDashboard.putBoolean("DriveTrain/tapeIsDetected()", tapeIsDetected());
-        SmartDashboard.putNumber("DriveTrain/IR Tape raw", _irTape.getValue());
+        SmartDashboard.putBoolean("DriveTrain/tapeIsDetected", tapeIsDetected());
+        SmartDashboard.putNumber("DriveTrain/IR Tape raw", _lightSensor.getValue());
 
     }
 

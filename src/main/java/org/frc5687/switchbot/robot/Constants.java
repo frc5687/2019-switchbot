@@ -16,12 +16,17 @@ public class Constants {
         public static final double HIGH_POW = 1.0;
         public static final double LOW_POW = -HIGH_POW;
 
-        public static final boolean LEFT_MOTORS_INVERTED = false;
-        public static final boolean RIGHT_MOTORS_INVERTED = true;
+        public static final boolean LEFT_MOTORS_INVERTED = true;
+        public static final boolean RIGHT_MOTORS_INVERTED = false;
         public static final double MAX_SPEED_IPS = 11 * 12;
         public static final double CAP_SPEED_IPS = .8 * MAX_SPEED_IPS;
         public static final double MAX_ACCELERATION_IPSS = CAP_SPEED_IPS / 2;
         public static final double MAX_JERK_IPSSS = CAP_SPEED_IPS;
+
+        public static final double LEFT_RATIO = .0266666666667;
+        public static final double RIGHT_RATIO = .0266666666667;
+
+
 
         public class TAPE_IR {
             public static final boolean ENABLED = true;
@@ -29,6 +34,11 @@ public class Constants {
             public static final int SECURED_HIGH_END = Integer.MAX_VALUE;
             public static final int DETECTED_LOW_END = 500;
             public static final int DETECTED_HIGH_END = Integer.MAX_VALUE;
+        }
+        public class LIGHT_SENSOR {
+            public static final boolean ENABLED = true;
+            public static final int DETECTED_VALUE = 1600;
+            public static final int DETECTED_HIGH_VALUE = Integer.MAX_VALUE;
         }
     }
 
