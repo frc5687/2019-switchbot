@@ -102,6 +102,10 @@ public class Robot extends TimedRobot {
     }
 
     @Override
+    public void disabledInit() {
+        _drivetrain.enableCoastMode();
+    }
+    @Override
     public void autonomousInit() {
         _imu.reset();
         _drivetrain.resetDriveEncoders();

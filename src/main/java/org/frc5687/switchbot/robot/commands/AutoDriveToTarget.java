@@ -85,15 +85,16 @@ public class AutoDriveToTarget extends Command  {
         _angleController.setSetpoint(_angleTarget);
         _angleController.enable();
 
+        double distanceSetPoint = _driveTrain.getDistance() + _driveTrain.getIRDistanceSensor().getDistance() - _distanceTarget;
 
-        _distanceController = new PIDController(kPDistance, kIDistance, kDDistance, _driveTrain.getIRDistanceSensor(), new DistanceListener(), 0.1);
-        _distanceController.setInputRange(0, 80);
+        _distanceController = new PIDController(kPDistance, kIDistance, kDDistance, _driveTrain, new DistanceListener(), 0.1);
         _distanceController.setOutputRange(-speed, speed);
         _distanceController.setAbsoluteTolerance(_distanceTolerance);
         _distanceController.setContinuous(false);
-        _distanceController.setSetpoint(_distanceTarget);
+        _distanceController.setSetpoint(distanceSetPoint);
         _distanceController.enable();
 
+        SmartDashboard.putNumber("AutoDriveToTarget/distance/setpoint", distanceSetPoint);
 
     }
 
@@ -111,6 +112,18 @@ public class AutoDriveToTarget extends Command  {
             _angleController.setSetpoint(_angleTarget);
             SmartDashboard.putNumber("AutoDriveToTarget/anglesetpoint", _angleTarget);
         }
+
+        double distanceSetPoint = _driveTrain.getDistance() + _driveTrain.getIRDistanceSensor().getDistance() - _distanceTarget;
+        double oldSetpoint = _distanceController.getSetpoint();
+
+        if (Math.abs(distanceSetPoint - oldSetpoint) > _distanceTolerance) {
+            _distanceController.setSetpoint(distanceSetPoint);
+            SmartDashboard.putNumber("AutoDriveToTarget/distance/setpoint", distanceSetPoint);
+        }
+
+        _distanceController.setSetpoint(distanceSetPoint);
+        _distanceController.enable();
+
 
         SmartDashboard.putBoolean("AutoDriveToTarget/onTarget", _angleController.onTarget());
         SmartDashboard.putNumber("AutoDriveToTarget/yaw", _imu.getYaw());
@@ -136,6 +149,7 @@ public class AutoDriveToTarget extends Command  {
 
     @Override
     protected void end() {
+        _driveTrain.enableBrakeMode();
         _driveTrain.setPower(0,0, true);
         DriverStation.reportError("AutoDriveToTarget finished: angle=" + _imu.getYaw() + ", distance=" + _driveTrain.getIRDistanceSensor().getDistance() + ", time=" + (System.currentTimeMillis() - _startTimeMillis), false);
         _distanceController.disable();
