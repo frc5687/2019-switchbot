@@ -7,6 +7,7 @@ import org.frc5687.switchbot.robot.LEDColors;
 import org.frc5687.switchbot.robot.RobotMap;
 import org.frc5687.switchbot.robot.utils.Color;
 import org.frc5687.switchbot.robot.utils.LEDController;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 /**
  * Subsystem to control lights for vision tracking and shooter aid
@@ -18,7 +19,6 @@ public class LEDStrip extends Subsystem {
     private LEDController redStrip;
     private LEDController greenStrip;
     private LEDController blueStrip;
-
     private Shifter.Gear _gear;
     private boolean _hasCube;
 
@@ -83,7 +83,7 @@ public class LEDStrip extends Subsystem {
             SmartDashboard.putNumber("ledstrip/green", greenStrip.getRaw());
             SmartDashboard.putNumber("ledstrip/blue", blueStrip.getRaw());
         } catch (Exception e) {
-            DriverStation.reportError(e.getMessage(), true);
+            RioLogger.error(this.getClass().getSimpleName(),  e.getMessage());
         }
     }
 

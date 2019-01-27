@@ -73,9 +73,9 @@ public class AutoDriveToTarget extends Command  {
         double yawAngle = _imu.getAngle();
         _angleTarget = limeLightAngle + yawAngle;
 
-        SmartDashboard.putNumber("AutoDriveToTarget/startoffset", limeLightAngle);
-        SmartDashboard.putNumber("AutoDriveToTarget/startyaw", yawAngle);
-        SmartDashboard.putNumber("AutoDriveToTarget/angletarget", _angleTarget);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/startoffset", limeLightAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/startyaw", yawAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/target", _angleTarget);
 
         _angleController = new PIDController(kPAngle, kIAngle, kDAngle, _imu, new AngleListener(), 0.01);
         _angleController.setInputRange(Constants.Auto.MIN_IMU_ANGLE, Constants.Auto.MAX_IMU_ANGLE);
@@ -104,13 +104,13 @@ public class AutoDriveToTarget extends Command  {
         double yawAngle = _imu.getAngle();
         _angleTarget = limeLightAngle + yawAngle;
 
-        SmartDashboard.putNumber("AutoDriveToTarget/startoffset", limeLightAngle);
-        SmartDashboard.putNumber("AutoDriveToTarget/startyaw", yawAngle);
-        SmartDashboard.putNumber("AutoDriveToTarget/target", _angleTarget);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/startoffset", limeLightAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/startyaw", yawAngle);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/target", _angleTarget);
 
         if (Math.abs(_angleTarget - _angleController.getSetpoint()) > Constants.Auto.DriveToTarget.ANGLE_TOLERANCE) {
             _angleController.setSetpoint(_angleTarget);
-            SmartDashboard.putNumber("AutoDriveToTarget/anglesetpoint", _angleTarget);
+            SmartDashboard.putNumber("AutoDriveToTarget/angle/setpoint", _angleTarget);
         }
 
         double distanceSetPoint = _driveTrain.getDistance() + _driveTrain.getIRDistanceSensor().getDistance() - _distanceTarget;
@@ -125,14 +125,16 @@ public class AutoDriveToTarget extends Command  {
         _distanceController.enable();
 
 
-        SmartDashboard.putBoolean("AutoDriveToTarget/onTarget", _angleController.onTarget());
-        SmartDashboard.putNumber("AutoDriveToTarget/yaw", _imu.getYaw());
+        SmartDashboard.putBoolean("AutoDriveToTarget/angle/onTarget", _angleController.onTarget());
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/yaw", _imu.getYaw());
 
-        SmartDashboard.putNumber("AutoDriveToTarget/anglePIDOut", _anglePIDOut);
+        SmartDashboard.putNumber("AutoDriveToTarget/angle/PIDOut", _anglePIDOut);
         SmartDashboard.putNumber("AutoDriveToTarget/distance/PIDOut", _distancePIDOut);
         SmartDashboard.putNumber("AutoDriveToTarget/distance/target", _driveTrain.getIRDistanceSensor().getDistance());
+        SmartDashboard.putNumber("AutoDriveToTarget/distance/current", _driveTrain.getDistance());
 
-        _driveTrain.setPower(-_distancePIDOut + _anglePIDOut , -_distancePIDOut - _anglePIDOut, true); // positive output is clockwise
+        _distancePIDOut = 0;
+        _driveTrain.setPower(_distancePIDOut + _anglePIDOut , _distancePIDOut - _anglePIDOut, true); // positive output is clockwise
     }
 
 

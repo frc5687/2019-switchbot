@@ -11,10 +11,8 @@ import org.frc5687.switchbot.robot.subsystems.Shifter;
 import org.frc5687.switchbot.robot.utils.AxisButton;
 import org.frc5687.switchbot.robot.utils.Gamepad;
 import org.frc5687.switchbot.robot.utils.Helpers;
-
 import static org.frc5687.switchbot.robot.utils.Helpers.applyDeadband;
 import static org.frc5687.switchbot.robot.utils.Helpers.applySensitivityFactor;
-
 public class OI {
 
     protected Gamepad _driverGamepad;
@@ -46,6 +44,7 @@ public class OI {
 
     private Shifter.Gear _gear = Shifter.Gear.LOW;
     private long _endRumbleMillis = 0;
+
 
     public OI() {
         _driverGamepad = new Gamepad(0);

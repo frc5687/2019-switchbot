@@ -9,6 +9,7 @@ import jaci.pathfinder.followers.DistanceFollower;
 import org.frc5687.switchbot.robot.Constants;
 import org.frc5687.switchbot.robot.OI;
 import org.frc5687.switchbot.robot.subsystems.Arm;
+import org.frc5687.switchbot.robot.utils.RioLogger;
 
 /**
  * Created by Ben Bernard on 6/8/2018.
@@ -39,7 +40,7 @@ public class MoveArmToSetpointPath extends Command {
         _arm.disable();
         double _start = _arm.getAngle();
         _endMillis = System.currentTimeMillis() + _timeout;
-        DriverStation.reportError("Starting MoveArmToSetpointPath from " + _start + " to " + _target + " for max " + _timeout + "ms", false);
+        RioLogger.info(this.getClass().getSimpleName(), "Starting MoveArmToSetpointPath from " + _start + " to " + _target + " for max " + _timeout + "ms");
 
         Waypoint[] points = new Waypoint[] {
                 new Waypoint(0, _start, 0),
@@ -65,7 +66,7 @@ public class MoveArmToSetpointPath extends Command {
 
     @Override
     protected void end() {
-        DriverStation.reportError("MoveArmToSetpointPID Ending", false);
+        RioLogger.info(this.getClass().getSimpleName(), "MoveArmToSetpointPID Ending");
         if (!DriverStation.getInstance().isAutonomous()) {
             _arm.disable();
             _arm.drive(_oi.getArmSpeed());

@@ -8,7 +8,6 @@ public class PDP extends PowerDistributionPanel {
     private double[] cache;
     private Thread _thread;
     private PDPCacheUpdater _pdpCacheUpdater;
-
     public PDP() {
         super();
         cache = new double[16];
@@ -51,7 +50,7 @@ public class PDP extends PowerDistributionPanel {
     public boolean excessiveCurrent(int channel, double threshold) {
         double current = getCurrent(channel);
         if (current >= threshold) {
-            DriverStation.reportError("PDP Channel: " + channel + " excessive at " + current, false);
+            RioLogger.debug(this.getClass().getSimpleName(), "PDP Channel: " + channel + " excessive at " + current);
             return true;
         }
         return false;
@@ -72,7 +71,7 @@ public class PDP extends PowerDistributionPanel {
                     }
                     Thread.sleep(250);
                 } catch (Exception e) {
-                    DriverStation.reportError("PDPCacheUpdater exception: " + e.toString(), false);
+                    RioLogger.error(this.getClass().getSimpleName(),  "PDPCacheUpdater exception: " + e.toString());
                 }
             }
         }
