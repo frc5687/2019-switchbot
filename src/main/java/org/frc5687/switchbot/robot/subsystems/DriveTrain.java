@@ -224,12 +224,13 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * Get the number of ticks since the last reset
      * @return
      */
-    public long getLeftTicks() {
-        throw new RuntimeException();
+    public double getLeftTicks() {
+        return _leftEncoder.getPosition();
+
     }
 
-    public long getRightTicks() {
-        throw new RuntimeException();
+    public double getRightTicks() {
+        return _rightEncoder.getPosition();
     }
 
     /**
@@ -238,6 +239,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      */
     public double getLeftDistance() {
         double current = _leftEncoder.getPosition();
+        
         return current * Constants.DriveTrain.LEFT_RATIO - _leftOffset;
     }
 
