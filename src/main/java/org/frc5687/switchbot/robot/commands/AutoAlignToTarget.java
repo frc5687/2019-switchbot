@@ -13,6 +13,7 @@ import org.frc5687.switchbot.robot.Constants;
 import org.frc5687.switchbot.robot.OI;
 import org.frc5687.switchbot.robot.Robot;
 import org.frc5687.switchbot.robot.subsystems.DriveTrain;
+import org.frc5687.switchbot.robot.utils.Limelight;
 import org.frc5687.switchbot.robot.utils.RioLogger;
 
 public class AutoAlignToTarget extends Command implements PIDOutput {
@@ -22,6 +23,7 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
     private double angle;
     private double speed;
     private long _timeout = 2000;
+    private Limelight _limelight;
 
     private double pidOut;
 
@@ -34,8 +36,6 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
     private AHRS imu;
 
     private String _message = "";
-    NetworkTable _table;
-
     private OI _oi;
 
     private DriveTrainBehavior _driveTrainBehavior = DriveTrainBehavior.bothSides;
@@ -47,36 +47,36 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
     }
 
     public AutoAlignToTarget(Robot robot, double speed) {
-        this(robot.getDriveTrain(), robot.getIMU(), speed);
+        this(robot.getDriveTrain(), robot.getIMU(), robot.get_limelight(), speed);
     }
 
-    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, double speed) {
-        this(driveTrain, imu, speed, 2000);
+    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, Limelight limelight, double speed) {
+        this(driveTrain, imu, limelight, speed, 2000);
     }
 
-    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu,  double speed, long timeout) {
-        this(driveTrain, imu, speed, timeout, Constants.Auto.Align.TOLERANCE, "");
+    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, Limelight limelight,  double speed, long timeout) {
+        this(driveTrain, imu, limelight, speed, timeout, Constants.Auto.Align.TOLERANCE, "");
     }
 
     public AutoAlignToTarget(Robot robot, long timeout, double tolerance) {
-        this(robot.getDriveTrain(), robot.getIMU(), Constants.Auto.Align.SPEED, timeout, tolerance, "");
+        this(robot.getDriveTrain(), robot.getIMU(), robot.get_limelight(), Constants.Auto.Align.SPEED, timeout, tolerance, "");
     }
 
     public AutoAlignToTarget(Robot robot, double speed, long timeout, double tolerance) {
-        this(robot.getDriveTrain(), robot.getIMU(), speed, timeout, tolerance, "");
+        this(robot.getDriveTrain(), robot.getIMU(), robot.get_limelight(), speed, timeout, tolerance, "");
         _oi = robot.getOI();
     }
 
-    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, double speed, long timeout, double tolerance, String message) {
-        this(driveTrain, imu, speed, timeout, tolerance, DriveTrainBehavior.bothSides, message);
+    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, Limelight limelight, double speed, long timeout, double tolerance, String message) {
+        this(driveTrain, imu, limelight, speed, timeout, tolerance, DriveTrainBehavior.bothSides, message);
     }
 
     public AutoAlignToTarget(Robot robot, double speed, long timeout, double tolerance, DriveTrainBehavior driveTrainBehavior, String message) {
-        this(robot.getDriveTrain(), robot.getIMU(), speed, timeout, tolerance, driveTrainBehavior, message);
+        this(robot.getDriveTrain(), robot.getIMU(), robot.get_limelight(), speed, timeout, tolerance, driveTrainBehavior, message);
         _oi = robot.getOI();
     }
 
-    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, double speed, long timeout, double tolerance, DriveTrainBehavior driveTrainBehavior, String message) {
+    public AutoAlignToTarget(DriveTrain driveTrain, AHRS imu, Limelight limelight, double speed, long timeout, double tolerance, DriveTrainBehavior driveTrainBehavior, String message) {
         requires(driveTrain);
         this.angle = angle;
         this.speed = speed;
@@ -86,6 +86,7 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
         _tolerance = tolerance;
         _driveTrainBehavior = driveTrainBehavior;
         _message = message;
+        _limelight = limelight;
     }
 
     @Override
@@ -97,10 +98,8 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
         // 1: Read current target angle from limelight
         // 2: Read current yaw from navX
         // 3: Set controller.angle to sum
-        _table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry tx = _table.getEntry("tx");
 
-        double limeLightAngle = tx.getDouble(0.0);
+        double limeLightAngle = _limelight.getHorizontalAngle();
         double yawAngle = imu.getAngle();
         angle = limeLightAngle + yawAngle;
 
@@ -125,8 +124,7 @@ public class AutoAlignToTarget extends Command implements PIDOutput {
 
     @Override
     protected void execute() {
-        NetworkTableEntry tx = _table.getEntry("tx");
-        double limeLightAngle = tx.getDouble(0.0);
+        double limeLightAngle = _limelight.getHorizontalAngle();
         double yawAngle = imu.getAngle();
         angle = limeLightAngle + yawAngle;
 

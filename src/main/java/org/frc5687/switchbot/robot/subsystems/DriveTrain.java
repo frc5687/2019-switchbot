@@ -18,6 +18,7 @@ import org.frc5687.switchbot.robot.RobotMap;
 import org.frc5687.switchbot.robot.commands.AllDrive;
 import org.frc5687.switchbot.robot.utils.Helpers;
 import org.frc5687.switchbot.robot.utils.RioLogger;
+import org.frc5687.switchbot.robot.utils.IRDistanceSensor;
 
 import static org.frc5687.switchbot.robot.utils.Helpers.limit;
 
@@ -40,11 +41,15 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
     private AnalogInput _lightSensor;
+    private AnalogInput _lightSensorfront;
+    private AnalogInput _lightSensorback;
     public AHRS _imu;
     private double _rightOffset;
     private double _leftOffset;
     private double _lastLeftPosition = 0;
     private double _lastRightPosition = 0;
+
+    private IRDistanceSensor _irDistanceSensor;
 
     public DriveTrain(Robot robot) {
         _robot = robot;
@@ -55,6 +60,7 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _leftFollower = new CANSparkMax(RobotMap.CAN.LEFT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
         _rightFollower = new CANSparkMax(RobotMap.CAN.RIGHT_FOLLOWER_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+        _irDistanceSensor = new IRDistanceSensor(RobotMap.Analog.DISTANCE_SENSOR, IRDistanceSensor.Type.MEDIUM);
         // Motor Initialization
 
         // Setup followers to follow their master
@@ -99,6 +105,9 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         resetDriveEncoders();
 
         _lightSensor = new AnalogInput(RobotMap.Analog.LIGHT_SENSOR);
+        _lightSensorfront = new AnalogInput(RobotMap.Analog.LIGHT_SENSOR_FRONT);
+        _lightSensorback = new AnalogInput(RobotMap.Analog.LIGHT_SENSOR_BACK);
+
 
 
     }
@@ -360,6 +369,15 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         return value >= Constants.DriveTrain.LIGHT_SENSOR.DETECTED_VALUE;
     }
 
+    public boolean tapeIsDetectedfront() {
+        int value = _lightSensorfront.getValue();
+        return value >= Constants.DriveTrain.LIGHT_SENSOR_Front.DETECTED_VALUE;
+    }
+
+    public boolean tapeIsDetectedback() {
+        int value = _lightSensorback.getValue();
+        return value >= Constants.DriveTrain.LIGHT_SENSOR_BACK.DETECTED_VALUE;
+    }
 
     @Override
     public double pidGet() {
@@ -402,7 +420,9 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         SmartDashboard.putString("DriveTrain/neutralMode", "Coast");
     }
 
-
+    public IRDistanceSensor getIRDistanceSensor() {
+        return _irDistanceSensor;
+    }
 
     public enum DriveMode {
         TANK(0),
@@ -430,7 +450,13 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         SmartDashboard.putNumber("DriveTrain/RightSpeed", getRightSpeed());
         SmartDashboard.putNumber("DriveTrain/Yaw", _imu.getYaw());
         SmartDashboard.putBoolean("DriveTrain/tapeIsDetected", tapeIsDetected());
+        SmartDashboard.putBoolean("DriveTrain/tapeIsDetectedFront", tapeIsDetectedfront());
+        SmartDashboard.putBoolean("DriveTrain/tapeIsDetectedBack", tapeIsDetectedback());
         SmartDashboard.putNumber("DriveTrain/IR Tape raw", _lightSensor.getValue());
+        SmartDashboard.putNumber("DriveTrain/IR Tape (front) raw", _lightSensorfront.getValue());
+        SmartDashboard.putNumber("DriveTrain/IR Tape (back) raw", _lightSensorback.getValue());
+        SmartDashboard.putNumber("DriveTrain/IR Target Distance ", _irDistanceSensor.getDistance());
+        SmartDashboard.putNumber("DriveTrain/IR Target Raw ", _irDistanceSensor.getRaw());
 
     }
 
