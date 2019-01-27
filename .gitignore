@@ -57,3 +57,4 @@ run/
 gradle/.launch/
 !gradle/*/*.jar
 src/main/java/org/frc5687/powerup/prototyping/utils/Reader.java
+src/main/java/org/frc5687/switchbot/robot/utils/Version.java

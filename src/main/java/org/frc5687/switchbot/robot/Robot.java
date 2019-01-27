@@ -15,6 +15,7 @@ import org.frc5687.switchbot.robot.commands.AutoGroup;
 import org.frc5687.switchbot.robot.subsystems.*;
 import org.frc5687.switchbot.robot.utils.AutoChooser;
 import org.frc5687.switchbot.robot.utils.PDP;
+import org.frc5687.switchbot.robot.utils.Version;
 
 public class Robot extends TimedRobot {
 
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        DriverStation.reportError("Starting " + this.getClass().getCanonicalName() + " from branch " + Version.BRANCH, false);
         _instance = this;
         // setPeriod(1 / Constants.CYCLES_PER_SECOND);
         LiveWindow.disableAllTelemetry();
