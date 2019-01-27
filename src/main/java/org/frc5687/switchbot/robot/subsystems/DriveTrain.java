@@ -34,8 +34,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     CANSparkMax _rightMaster;
     CANSparkMax _rightFollower;
 
-    Encoder _leftEncoder;
-    Encoder _rightEncoder;
+    CANEncoder _leftEncoder;
+    CANEncoder _rightEncoder;
 
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
@@ -93,8 +93,8 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
         // Configure the encoders
-        _leftEncoder = new Encoder(RobotMap.DIO.DRIVE_LEFT_ENCODER_B, RobotMap.DIO.DRIVE_LEFT_ENCODER_A);
-        _rightEncoder = new Encoder(RobotMap.DIO.DRIVE_RIGHT_ENCODER_B,RobotMap.DIO.DRIVE_RIGHT_ENCODER_A);
+        _leftEncoder = _leftMaster.getEncoder();
+        _rightEncoder = _rightMaster.getEncoder();
 
         resetDriveEncoders();
 
@@ -225,12 +225,13 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * Get the number of ticks since the last reset
      * @return
      */
-    public long getLeftTicks() {
-        return (long)_leftEncoder.get();
+    public double getLeftTicks() {
+        return _leftEncoder.getPosition();
+
     }
 
-    public long getRightTicks() {
-        return (long)_rightEncoder.get();
+    public double getRightTicks() {
+        return _rightEncoder.getPosition();
     }
 
     /**
@@ -238,19 +239,15 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public double getLeftDistance() {
-        double current = _leftEncoder.get();
-        if (current!=0) {
-            _lastLeftPosition = current;
-        }
-        return _lastLeftPosition * Constants.DriveTrain.LEFT_RATIO - _leftOffset;
+        double current = _leftEncoder.getPosition();
+        
+        return current * Constants.DriveTrain.LEFT_RATIO - _leftOffset;
     }
 
     public double getRightDistance() {
-        double current = _rightEncoder.get();
-        if (current!=0) {
-            _lastRightPosition = current;
-        }
-        return _lastRightPosition * Constants.DriveTrain.RIGHT_RATIO - _rightOffset;
+        double current = _rightEncoder.getPosition();
+
+        return current * Constants.DriveTrain.RIGHT_RATIO - _rightOffset;
     }
 
     /**
@@ -348,11 +345,11 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public double getLeftRate() {
-        return _leftEncoder.getRate();
+        return _leftEncoder.getVelocity();
     }
 
     public double getRightRate() {
-        return _rightEncoder.getRate();
+        return _rightEncoder.getVelocity();
     }
 
     public DriveMode getDriveMode() { return _driveMode; }
