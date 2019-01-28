@@ -105,7 +105,7 @@ public class OI {
         _driverYButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.UP));
         _driverXButton.whenPressed(new AutoDriveToTarget(robot, .2, 10, .5, "Initial approach"));
         _driverBButton.whenPressed(new AutoDriveToTarget(robot, 0,0,100, ""));
-        _driverAButton.whenPressed(new AutoDriveToTarget(robot, .2, 16, .5, "Initial approach"));
+        _driverAButton.whenPressed(new AutoRetrieveHatch(robot));
 
 
     }
