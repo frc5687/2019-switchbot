@@ -147,6 +147,8 @@ public class AutoDriveToTarget extends Command  {
             return true;
         }
 
+        if (_driveTrain.getDistance() >= _distanceController.getSetpoint()) { return true; }
+
         return false;
     }
 
