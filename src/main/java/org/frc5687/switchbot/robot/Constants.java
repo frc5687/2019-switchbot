@@ -302,4 +302,14 @@ public class Constants {
         public static final double TOLERANCE = 0.02;
     }
 
+    public class AutoDrivePath {
+        public static final double ANGLE_TOLERANCE = 0.25;
+        public static final double kPangle = .001;
+        public static final double kIangle = .0001;
+        public static final double kDangle = .001;
+
+        public static final double kPdist = .001;
+        public static final double kIdist = .0001;
+        public static final double kDdist = .001;
+    }
 }
