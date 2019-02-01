@@ -102,7 +102,7 @@ public class OI {
         _operatorBButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.BACK_SWITCH));
         _operatorAButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.FRONT_FLAT));
 
-        _driverYButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.UP));
+        _driverYButton.whenPressed(new AutoDrive(robot.getDriveTrain(), robot.getIMU(), 48, .01, true, true, true,5000, "StraightSwitch"));
         _driverXButton.whenPressed(new AutoDriveToTarget(robot, .2, 10, .5, "Initial approach"));
         _driverBButton.whenPressed(new AutoDriveToTarget(robot, 0,0,100, ""));
         _driverAButton.whenPressed(new AutoRetrieveHatch(robot));

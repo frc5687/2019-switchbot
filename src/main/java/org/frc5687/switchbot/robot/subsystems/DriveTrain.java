@@ -1,10 +1,10 @@
 package org.frc5687.switchbot.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+//import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -35,8 +35,10 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     CANSparkMax _rightMaster;
     CANSparkMax _rightFollower;
 
-    CANEncoder _leftEncoder;
-    CANEncoder _rightEncoder;
+    Encoder _leftEncoder;
+    Encoder _rightEncoder;
+    CANEncoder _leftCANEncoder;
+    CANEncoder _rightCANEncoder;
 
     private Robot _robot;
     private DriveMode _driveMode = DriveMode.CHEESY_ARCADE;
@@ -99,8 +101,10 @@ public class DriveTrain extends Subsystem  implements PIDSource {
         _rightFollower.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
 //
         // Configure the encoders
-        _leftEncoder = _leftMaster.getEncoder();
-        _rightEncoder = _rightMaster.getEncoder();
+        _leftCANEncoder = _leftMaster.getEncoder();
+        _rightCANEncoder = _rightMaster.getEncoder();
+        _leftEncoder = new Encoder(RobotMap.DIO.DRIVE_LEFT_ENCODER_B, RobotMap.DIO.DRIVE_LEFT_ENCODER_A);
+        _rightEncoder = new Encoder(RobotMap.DIO.DRIVE_RIGHT_ENCODER_B, RobotMap.DIO.DRIVE_RIGHT_ENCODER_A);
 
         resetDriveEncoders();
 
@@ -234,13 +238,20 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * Get the number of ticks since the last reset
      * @return
      */
+    public double getLeftCANTicks() {
+        return _leftCANEncoder.getPosition();
+    }
+    public double getRightCANTicks() {
+        return _rightCANEncoder.getPosition();
+    }
+
     public double getLeftTicks() {
-        return _leftEncoder.getPosition();
+        return _leftEncoder.getDistance();
 
     }
 
     public double getRightTicks() {
-        return _rightEncoder.getPosition();
+        return _rightEncoder.getDistance();
     }
 
     /**
@@ -248,13 +259,13 @@ public class DriveTrain extends Subsystem  implements PIDSource {
      * @return
      */
     public double getLeftDistance() {
-        double current = _leftEncoder.getPosition();
+        double current = _leftEncoder.get();
         
         return current * Constants.DriveTrain.LEFT_RATIO - _leftOffset;
     }
 
     public double getRightDistance() {
-        double current = _rightEncoder.getPosition();
+        double current = _rightEncoder.get();
 
         return current * Constants.DriveTrain.RIGHT_RATIO - _rightOffset;
     }
@@ -354,12 +365,16 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     }
 
     public double getLeftRate() {
-        return _leftEncoder.getVelocity();
+        return _leftEncoder.getRate();
     }
 
+    public double getLeftCANRate() {return _leftCANEncoder.getVelocity();}
+
     public double getRightRate() {
-        return _rightEncoder.getVelocity();
+        return _rightEncoder.getRate();
     }
+
+    public double getRightCANRate() { return _rightCANEncoder.getVelocity();}
 
     public DriveMode getDriveMode() { return _driveMode; }
 
@@ -444,8 +459,16 @@ public class DriveTrain extends Subsystem  implements PIDSource {
     public void updateDashboard() {
         SmartDashboard.putNumber("DriveTrain/LeftDistance", getLeftDistance());
         SmartDashboard.putNumber("DriveTrain/RIghtDistance", getRightDistance());
-        SmartDashboard.putNumber("DriveTrain/LeftRate", getLeftRate());
-        SmartDashboard.putNumber("DriveTrain/RightRate", getRightRate());
+        SmartDashboard.putNumber("DriveTrain/MAG/LeftRate", getLeftRate());
+        SmartDashboard.putNumber("DriveTrain/MAG/RightRate", getRightRate());
+        SmartDashboard.putNumber("DriveTrain/CAN/LeftRate", getLeftCANRate());
+        SmartDashboard.putNumber("DriveTrain/CAN/RightRate", getRightCANRate());
+        SmartDashboard.putNumber("DriveTrain/MAG/RightTicks", getRightTicks());
+        SmartDashboard.putNumber("DriveTrain/MAG/LeftTicks", getLeftTicks());
+        SmartDashboard.putNumber("DriveTrain/CAN/RightTicks", getRightCANTicks());
+        SmartDashboard.putNumber("DriveTrain/CAN/LeftTicks", getLeftCANTicks());
+
+
         SmartDashboard.putNumber("DriveTrain/LeftSpeed", getLeftSpeed());
         SmartDashboard.putNumber("DriveTrain/RightSpeed", getRightSpeed());
         SmartDashboard.putNumber("DriveTrain/Yaw", _imu.getYaw());

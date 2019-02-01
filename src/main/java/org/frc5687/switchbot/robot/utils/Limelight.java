@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class Limelight {
     NetworkTable _table;
     NetworkTableEntry _tx;
+    NetworkTableEntry _ty;
 
 
     public Limelight() {
@@ -17,6 +18,7 @@ public class Limelight {
     public Limelight(String key) {
         _table = NetworkTableInstance.getDefault().getTable(key);
         _tx = _table.getEntry("tx");
+        _ty = _table.getEntry("ty");
     }
 
     public void enableLEDs() {
@@ -34,5 +36,7 @@ public class Limelight {
     public double getHorizontalAngle() {
         return _tx.getDouble(0.0);
     }
+
+    public double getVerticalAngle(){ return _ty.getDouble(0);}
 
 }

@@ -44,10 +44,10 @@ public class RobotMap {
     public static class DIO {
         public static final int ARM_FRONT_LIMIT = 0;
         public static final int ARM_REAR_LIMIT = 1;
-        public static final int DRIVE_LEFT_ENCODER_A = 2;
-        public static final int DRIVE_LEFT_ENCODER_B = 3;
-        public static final int DRIVE_RIGHT_ENCODER_A = 4;
-        public static final int DRIVE_RIGHT_ENCODER_B = 5;
+        public static final int DRIVE_RIGHT_ENCODER_A = 2;
+        public static final int DRIVE_RIGHT_ENCODER_B = 3;
+        public static final int DRIVE_LEFT_ENCODER_A = 4;
+        public static final int DRIVE_LEFT_ENCODER_B = 5;
     }
 
 }
