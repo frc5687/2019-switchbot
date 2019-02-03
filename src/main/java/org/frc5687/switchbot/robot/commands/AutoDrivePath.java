@@ -37,6 +37,7 @@ public class AutoDrivePath extends Command {
     public AutoDrivePath(DriveTrain driveTrain, AHRS imu, double distance, double speed) {
 
         _driveTrain = driveTrain;
+        requires(_driveTrain);
         _speed = speed;
         _imu = imu;
         Waypoint[] points = new Waypoint[] {
@@ -57,20 +58,24 @@ public class AutoDrivePath extends Command {
     }
 
     public AutoDrivePath(DriveTrain driveTrain, AHRS imu, String pathName) {
+        _driveTrain = driveTrain;
+        requires(_driveTrain);
+        _imu = imu;
         _leftTrajectory = PathfinderFRC.getTrajectory(pathName + ".right");
         _rightTrajectory = PathfinderFRC.getTrajectory(pathName + ".left");
 
         RioLogger.info(this.getClass().getSimpleName(), _leftTrajectory.length() + " segments.");
-
+        DriverStation.reportError("Loaded "+ _leftTrajectory.length() + " segments.", false);
     }
 
     @Override
     protected void initialize() {
         _driveTrain.resetDriveEncoders();
+        _driveTrain.enableBrakeMode();
         _leftFollower = new DistanceFollower(_leftTrajectory);
         _rightFollower = new DistanceFollower(_rightTrajectory);
-        _leftFollower.configurePIDVA(0.1, 0.0, 0.001, 1 / Constants.DriveTrain.MAX_SPEED_IPS, 0);
-        _rightFollower.configurePIDVA(0.1, 0.0, 0.001, 1 / Constants.DriveTrain.MAX_SPEED_IPS, 0);
+        _leftFollower.configurePIDVA(0.1, 0.0, 0.0, 1 / Constants.DriveTrain.MAX_SPEED_FPS, 0);
+        _rightFollower.configurePIDVA(0.1, 0.0, 0.0, 1 / Constants.DriveTrain.MAX_SPEED_FPS, 0);
 
         _anglePID = new PIDListener();
         _angleController = new PIDController(Constants.AutoDrivePath.kPangle, Constants.AutoDrivePath.kIangle, Constants.AutoDrivePath.kDangle, _imu, _anglePID, 0.05);
@@ -90,8 +95,8 @@ public class AutoDrivePath extends Command {
 
     @Override
     protected void execute() {
-        double leftDistance = _driveTrain.getLeftDistance();
-        double rightDistance = _driveTrain.getRightDistance();
+        double leftDistance = _driveTrain.getLeftDistance() / 12;
+        double rightDistance = _driveTrain.getRightDistance() / 12;
         _index++;
         RioLogger.info(this.getClass().getSimpleName(), "Left Segment " + _index + " target: " + _leftFollower.getSegment().x + " actual " + leftDistance + " vel=" + _leftFollower.getSegment().velocity);
         RioLogger.info(this.getClass().getSimpleName(), "Right Segment " + _index + " target: " + _rightFollower.getSegment().x + " actual " + rightDistance + " vel=" + _rightFollower.getSegment().velocity);
@@ -105,6 +110,27 @@ public class AutoDrivePath extends Command {
 
         RioLogger.info(this.getClass().getSimpleName(), "Calculated speed: " + leftSpeed + "," + rightSpeed + " angleFactor " + _angleFactor);
 
+        SmartDashboard.putNumber("AutoDrivePath/Index", _index);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Segment/X", _leftFollower.getSegment().x);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Segment/Y", _leftFollower.getSegment().y);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Segment/H", _leftFollower.getSegment().heading);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Segment/V", _leftFollower.getSegment().velocity);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Segment/D", _leftFollower.getSegment().position);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Real/D", leftDistance);
+        SmartDashboard.putNumber("AutoDrivePath/Left/Real/H", _imu.getYaw());
+        SmartDashboard.putNumber("AutoDrivePath/Left/Real/V", leftSpeed -_angleFactor);
+
+        SmartDashboard.putNumber("AutoDrivePath/Index", _index);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Segment/X", _rightFollower.getSegment().x);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Segment/Y", _rightFollower.getSegment().y);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Segment/H", _rightFollower.getSegment().heading);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Segment/V", _rightFollower.getSegment().velocity);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Segment/D", _rightFollower.getSegment().position);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Real/D", rightDistance);
+        SmartDashboard.putNumber("AutoDrivePath/Right/Real/H", _imu.getYaw());
+        SmartDashboard.putNumber("AutoDrivePath/Right/Real/V", rightSpeed +_angleFactor);
+
+
         _driveTrain.setPower(leftSpeed -_angleFactor , rightSpeed + _angleFactor, true);
     }
 
@@ -113,7 +139,10 @@ public class AutoDrivePath extends Command {
         return _leftFollower.isFinished() || _rightFollower.isFinished();
     }
 
-
+    @Override
+    protected void end() {
+        _driveTrain.setPower(0, 0, true);
+    }
     private class PIDListener implements PIDOutput {
 
         @Override

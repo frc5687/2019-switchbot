@@ -25,7 +25,7 @@ public class Constants {
 
         public static final double LEFT_RATIO = -1.090909090909;
         public static final double RIGHT_RATIO = 1.090909090909;
-
+        public static final double MAX_SPEED_FPS = 11.0;
 
 
         public class TAPE_IR {

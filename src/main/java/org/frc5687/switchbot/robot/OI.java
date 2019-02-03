@@ -1,5 +1,6 @@
 package org.frc5687.switchbot.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -103,9 +104,8 @@ public class OI {
         _operatorAButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.FRONT_FLAT));
 
         _driverYButton.whenPressed(new MoveArmToSetpoint(robot.getArm(), this, Constants.Arm.UP));
-        _driverXButton.whenPressed(new AutoDriveToTarget(robot, .2, 10, .5, "Initial approach"));
-        _driverBButton.whenPressed(new AutoDriveToTarget(robot, 0,0,100, ""));
-        _driverAButton.whenPressed(new AutoDriveToTarget(robot, .2, 16, .5, "Initial approach"));
+        _driverBButton.whenPressed(new AutoDrivePath(robot.getDriveTrain(), robot.getIMU(), "RightCargoToRightLoading"));
+        _driverAButton.whenPressed(new AutoDrivePath(robot.getDriveTrain(), robot.getIMU(), "RightToCargoRight"));
 
 
     }
